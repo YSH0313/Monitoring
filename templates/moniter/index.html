@@ -65,11 +65,13 @@
                         <dd>
                             <a onclick="xadmin.open('切换帐号','http://www.baidu.com')">切换帐号</a></dd>
                         <dd>
+                            <a href="{% url 'reg_user' %}">注册</a></dd>
+                        <dd>
                             <a href="./login.html">退出</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item to-index">
-                    <a href="/">前台首页</a></li>
+                    <a href="/index.html">前台首页</a></li>
             </ul>
         </div>
         <!-- 顶部结束 -->
@@ -90,7 +92,7 @@
                                     <cite>统计页面</cite></a>
                             </li>
                             <li>
-                                <a onclick="xadmin.add_tab('会员列表(静态表格)','{% url 'member' %}')">
+                                <a onclick="xadmin.add_tab('爬虫监控列表','{% url 'member' %}')">
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>爬虫监控列表</cite></a>
                             </li>

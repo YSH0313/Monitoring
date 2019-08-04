@@ -1,0 +1,96 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta name="keywords" content=""/>
+    <link href="{% static 'moniter/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css" media="all">
+    <link href="{% static 'moniter/css/style.css' %}" rel="stylesheet" type="text/css" media="all"/>
+    <link href="http://fonts.googleapis.com/css?family=Raleway:400,500,600,700,800,900" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'moniter/css/font.css' %}">
+    {#    <link rel="stylesheet" href="{% static 'moniter/css/xadmin.css' %}">#}
+    <script type="text/javascript" src="{% static 'moniter/lib/layui/layui.js' %}" charset="utf-8"></script>
+    <script type="text/javascript" src="{% static 'moniter/js/xadmin.js' %}"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+            <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+            <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+
+</head>
+<body style="background: url({% static 'moniter/images/111.jpg' %})">
+<div class="signupform">
+    <h1>爬虫监控平台注册表</h1>
+    <div class="container">
+
+        <div class="agile_info">
+            <div class="w3l_form">
+                <div class="left_grid_info">
+                    <h3>Welcome !</h3>
+                    <h4>请您注册您的账户，进行使用我们的业务</h4>
+                    <p> 请仔细填写您的信息，填写完成后请您仔细核对信息，否则可能导致您注册失败。</p>
+                </div>
+            </div>
+            <div class="w3_info">
+                <h2>创建一个帐户</h2>
+                <span></span>
+                <form action="{% url 'reg_user' %}" method="post" class="layui-form">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <span><i class="fa fa-user" aria-hidden="true"></i></span>
+                        <input type="text" placeholder="User Name" name="username" required="">
+                    </div>
+                    <div class="input-group">
+                        <span><i class="fa fa-envelope" aria-hidden="true"></i></span>
+                        <input type="email" placeholder="Email" name="email" required="">
+                    </div>
+                    <div class="input-group layui-form-item layui-input-inline">
+                        <label for="first_pass" class="layui-form-label">
+                            <span><i class="fa fa-lock" aria-hidden="true"></i></span></label>
+                        <input type="password" placeholder="Password" name="password" id="first_pass" lay-verify="pass"
+                               required="" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="input-group layui-form-item layui-input-inline">
+                        <label for="second_pass" class="layui-form-label">
+                            <span><i class="fa fa-lock" aria-hidden="true"></i></span></label>
+                        <input type="password" placeholder="Confirm Password" name="confirm_password" id="second_pass"
+                               lay-verify="repass" required="" autocomplete="off" class="layui-input">
+                    </div>
+                    <h4>我同意注册协议并进行注册</h4><input type="checkbox" value="remember-me"/>
+                    <button lay-submit="" class="btn btn-danger btn-block layui-btn" type="submit" >注册</button>
+                </form>
+            </div>
+            <div class="clear"></div>
+        </div>
+
+    </div>
+    <div class="footer">
+
+        <p>Copyright &copy; 2019.Company name All rights reserved.More Templates <a href="http://www.cssmoban.com/"
+                                                                                    target="_blank"
+                                                                                    title="袁少航">袁少航</a> - Collect from
+            <a href="http://www.baidu.com/" title="袁少航" target="_blank">袁少航</a></p>
+    </div>
+</div>
+<script>
+    layui.use(['form'],
+        function () {
+            $ = layui.jquery;
+            var form = layui.form;
+
+            //自定义验证规则
+            form.verify({
+                pass: [/(.+){6,12}$/, '密码必须6到12位'],
+                repass: function (value) {
+                    if ($('#first_pass').val() != $('#second_pass').val()) {
+                        return '两次密码不一致';
+                    }
+                }
+            })
+        });
+</script>
+</body>
+</html>

@@ -3,6 +3,11 @@ from django.db import models
 
 # Create your models here.
 
+class user(models.Model):
+    username = models.CharField(max_length=255)
+    password = models.CharField(max_length=255)
+    email = models.CharField(max_length=255)
+    phone = models.CharField(max_length=255)
 
 class data_count(models.Model):
     monday = models.IntegerField(default=0)

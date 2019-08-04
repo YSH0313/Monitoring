@@ -1,12 +1,38 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse,HttpResponseRedirect
 from django.http import JsonResponse
 from . import models
 from django.core.paginator import Paginator
 import datetime
+import hashlib
+
 
 # Create your views here.
+def login(request):
+    username_login = request.POST.get('username')
+    password_login = request.POST.get('password')
+    try:
+        username = models.user.objects.filter(username=username_login)
+        password = models.user.objects.filter(password=password_login)
+        if hashlib.md5((password_login+password_login+'qaz').encode(encoding='UTF-8')).hexdigest() == password:
+            if request.method == 'GET':
+                request.session['username'] = username
+                return render(request, 'moniter/index.html', {'username': request.session['username']})
+        else:
+            return render(request, 'moniter/login.html')
+    except:
+        return render(request, 'moniter/login.html')
+
+
 def index(request):
     return render(request, 'moniter/index.html')
+
+def reg_user(request):
+    username = request.POST.get('username')
+    password = hashlib.md5((request.POST.get('username')+request.POST.get('confirm_password')+'qaz').encode(encoding='UTF-8')).hexdigest()
+    email = request.POST.get('email')
+    models.user.objects.create(username=username, password=password, email=email)
+    return render(request, 'moniter/login.html')
+
 
 
 def welcome(request):
@@ -18,14 +44,16 @@ def welcome_first(request):
     new_num = {}
     num = models.data_count.objects.get(pk=1)
     new_num['monday'] = num.monday
-    new_num['tuesday'] = num.tuesday-num.monday
-    new_num['wednesday'] = num.wednesday-num.tuesday
-    new_num['thursday'] = num.thursday-num.wednesday
+    new_num['tuesday'] = num.tuesday - num.monday
+    new_num['wednesday'] = num.wednesday - num.tuesday
+    new_num['thursday'] = num.thursday - num.wednesday
+
     def getYesterday(num):
         today = datetime.date.today()
         twoday = datetime.timedelta(days=num)
         yesterday = today - twoday
         return str(yesterday)
+
     new_num['four_day'] = getYesterday(3)
     new_num['five_day'] = getYesterday(2)
     new_num['six_day'] = getYesterday(1)
@@ -42,6 +70,7 @@ def welcome_first(request):
     ]
 
     return render(request, 'moniter/welcome1.html', {'new_num': new_num, 'data_base': data_base})
+
 
 def edit_selectbase(request):
     new_num = {}
@@ -81,8 +110,8 @@ def edit_selectbase(request):
     new_num['wednesday'] = data.wednesday - data.tuesday
     new_num['thursday'] = data.thursday - data.wednesday
 
-    return render(request, 'moniter/welcome1.html', {'new_num': new_num, 'data_base': data_base, 'database_name': database_name})
-
+    return render(request, 'moniter/welcome1.html',
+                  {'new_num': new_num, 'data_base': data_base, 'database_name': database_name})
 
 
 def order(request):
@@ -104,15 +133,15 @@ def member(request):
     page_num = paginator.num_pages
     page_spider_list = paginator.page(page)
     if page_spider_list.has_next():
-        next_page = page+1
+        next_page = page + 1
     else:
         next_page = page
     if page_spider_list.has_previous():
-        previous_page = page-1
+        previous_page = page - 1
     else:
         previous_page = page
     return render(request, 'moniter/member-list.html', {'all_spider': page_spider_list,
-                                                        'page_num': range(1, page_num+1),
+                                                        'page_num': range(1, page_num + 1),
                                                         'curr_page': page,
                                                         'next_page': next_page,
                                                         'previous_page': previous_page
