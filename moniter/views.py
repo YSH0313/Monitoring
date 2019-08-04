@@ -26,6 +26,9 @@ def login(request):
 def index(request):
     return render(request, 'moniter/index.html')
 
+def reg_index(request):
+    return render(request, 'moniter/registered.html')
+
 def reg_user(request):
     username = request.POST.get('username')
     password = hashlib.md5((request.POST.get('username')+request.POST.get('confirm_password')+'qaz').encode(encoding='UTF-8')).hexdigest()
