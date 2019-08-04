@@ -26,15 +26,16 @@ def login(request):
 def index(request):
     return render(request, 'moniter/index.html')
 
-def reg_index(request):
-    return render(request, 'moniter/registered.html')
 
 def reg_user(request):
-    username = request.POST.get('username')
-    password = hashlib.md5((request.POST.get('username')+request.POST.get('confirm_password')+'qaz').encode(encoding='UTF-8')).hexdigest()
-    email = request.POST.get('email')
-    models.user.objects.create(username=username, password=password, email=email)
-    return render(request, 'moniter/login.html')
+    if request.method == 'GET':
+        return render(request, 'moniter/registered.html')
+    else:
+        username = request.POST.get('username')
+        password = hashlib.md5((request.POST.get('username')+request.POST.get('confirm_password')+'qaz').encode(encoding='UTF-8')).hexdigest()
+        email = request.POST.get('email')
+        models.user.objects.create(username=username, password=password, email=email)
+        return render(request, 'moniter/login.html')
 
 
 

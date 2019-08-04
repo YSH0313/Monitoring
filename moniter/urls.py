@@ -5,7 +5,6 @@ urlpatterns = [
     url(r'^index', views.index, name='index'),
     url(r'^$', views.login, name='login'),
     url(r'^reg_user', views.reg_user, name='reg_user'),
-    url(r'^reg_index', views.reg_index, name='reg_index'),
     url(r'^welcome', views.welcome),
     url(r'^first_welcome', views.welcome_first, name='first_welcome'),
     url(r'^edit_selectbase', views.edit_selectbase, name='edit_selectbase'),
