@@ -8,6 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport"
           content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+	<link href="{% static 'moniter/css/layui.css' %}" type="text/css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'moniter/css/font.css' %}">
     <link rel="stylesheet" href="{% static 'moniter/css/xadmin.css' %}">
     <script src="{% static 'moniter/lib/layui/layui.js' %}" charset="utf-8"></script>
@@ -27,6 +28,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
+    <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+{#    <script language="Javascript" src="{% static 'moniter/js/layui.js' %}"></script>#}
+    <script language="Javascript" src="{% static 'moniter/js/nicePage.js' %}"></script>
 
 </head>
 <body>
@@ -35,26 +39,44 @@
 
         <div class="layui-col-sm12 layui-col-md6">
             <div class="layui-card">
-                <div class="layui-card-header" style="float: left">最近四天新增数据</div>
+                <div class="layui-card-header" style="float: left">最近七天新增数据</div>
                 <div class="row">
                     <div class="col-lg-6">
-                        <form class="layui-form" method="post" action="{% url 'edit_selectbase' %}">
-                        <div class="input-group">
-                                {% csrf_token %}
-                                <input type="text" id="database" class="form-control" name="data_base" aria-label="..." value="{{ database_name }}">
-                            <div class="input-group-btn">
-                                <button type="submit" class="btn btn-default btn btn-danger layui-icon" >&#xe615; 确认</button>
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false">选择表 <span class="caret"></span>
-                                        <span class="sr-only"></span>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-right">
-                                    {% for database in data_base.data_base %}
-                                        <li><a onclick="edit_database('{{ database }}')">{{ database }}</a></li>
-                                    {% endfor %}
-                                </ul>
-                            </div><!-- /btn-group -->
-                        </div><!-- /input-group -->
+                        <form class="layui-form" method="post" action="{% url 'first_welcome' %}"
+                              onsubmit="return checkForm(this);">
+                            {% csrf_token %}
+                            <div class="input-group">
+                                <input type="text" id="database" class="form-control" name="dimensions" aria-label="..."
+                                       value="{{ info.dimensions_name }}" placeholder="请选择维度" style="width: 150px">
+                                <div class="input-group-btn">
+                                    <div style="width: 500px"><input type="date" id="startdate" name="startdate"
+                                                                     class="form-control"
+                                                                     style="float: left;width: 150px;height: 34px"
+                                                                     value="{{ info.startdate }}"><input type="date"
+                                                                                                         id="enddate"
+                                                                                                         name="enddate"
+                                                                                                         class="form-control"
+                                                                                                         style="float: left;width: 150px;height: 34px"
+                                                                                                         value="{{ info.enddate }}">
+                                        <button type="button" class="btn btn-default dropdown-toggle"
+                                                data-toggle="dropdown"
+                                                aria-haspopup="true" aria-expanded="false"
+                                                style="float: left;background-color: #2d72d9;color: white;">选择维度 <span
+                                                class="caret"></span>
+                                            <span class="sr-only"></span>
+                                        </button>
+                                        <button type="submit" class="btn btn-default btn btn-danger layui-icon"
+                                                style="float: left">&#xe615; 确认
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            {% for dimensions in dimensions.dimensions %}
+                                                <li><a onclick="edit_database('{{ dimensions }}')">{{ dimensions }}</a>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div><!-- /btn-group -->
+                            </div><!-- /input-group -->
                         </form>
                     </div>
                 </div>
@@ -66,39 +88,379 @@
         </div>
         <div class="layui-col-sm12 layui-col-md6">
             <div class="layui-card">
-                <div class="layui-card-header">最新一周PV/UV量</div>
+                <div class="layui-card-header" style="float: left">月增数据展示</div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <form class="layui-form" method="post" action="{% url 'first_welcome' %}"
+                              onsubmit="return checkForm(this);">
+                            {% csrf_token %}
+                            <input type="hidden" name="month" value="month">
+                            <div class="input-group">
+                                <input type="text" id="database1" class="form-control" name="dimensions"
+                                       aria-label="..." value="{{ infos.dimensions_name }}" placeholder="请选择维度"
+                                       style="width: 150px">
+                                <div class="input-group-btn">
+                                    <div style="width: 500px"><input type="month" id="startmonth" name="startmonth"
+                                                                     class="form-control"
+                                                                     style="float: left;width: 150px;height: 34px"
+                                                                     value="{{ infos.startmonth }}"><input type="month"
+                                                                                                           id="endmonth"
+                                                                                                           name="endmonth"
+                                                                                                           class="form-control"
+                                                                                                           style="float: left;width: 150px;height: 34px"
+                                                                                                           value="{{ infos.endmonth }}">
+                                        <button type="button" class="btn btn-default dropdown-toggle"
+                                                data-toggle="dropdown"
+                                                aria-haspopup="true" aria-expanded="false"
+                                                style="float: left;background-color: #2d72d9;color: white;">选择维度 <span
+                                                class="caret"></span>
+                                            <span class="sr-only"></span>
+                                        </button>
+                                        <button type="submit" class="btn btn-default btn btn-danger layui-icon"
+                                                style="float: left">&#xe615; 确认
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            {% for dimensions in dimensions.dimensions %}
+                                                <li><a onclick="edit_database1('{{ dimensions }}')">{{ dimensions }}</a>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div><!-- /btn-group -->
+                            </div><!-- /input-group -->
+                        </form>
+                    </div>
+                </div>
+
                 <div class="layui-card-body" style="min-height: 280px;">
                     <div id="main2" class="layui-col-sm12" style="height: 300px;"></div>
-
                 </div>
             </div>
         </div>
-        <div class="layui-col-sm12 layui-col-md6">
-            <div class="layui-card">
-                <div class="layui-card-header">用户来源</div>
-                <div class="layui-card-body" style="min-height: 280px;">
-                    <div id="main3" class="layui-col-sm12" style="height: 300px;"></div>
-
+        <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-body ">
+                            <form class="layui-form layui-col-space5">
+                                <div class="layui-input-inline layui-show-xs-block">
+                                    <input class="layui-input" placeholder="开始日" name="start" id="start"></div>
+                                <div class="layui-input-inline layui-show-xs-block">
+                                    <input class="layui-input" placeholder="截止日" name="end" id="end"></div>
+                                <div class="layui-input-inline layui-show-xs-block">
+                                    <input type="text" name="username" placeholder="请输入数据源名称" autocomplete="off" class="layui-input"></div>
+                                <div class="layui-input-inline layui-show-xs-block">
+                                    <button class="layui-btn" lay-submit="" lay-filter="sreach">
+                                        <i class="layui-icon">&#xe615;</i></button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="layui-card-header">
+                            <button class="layui-btn layui-btn-danger" onclick="delAll()">
+                                <i class="layui-icon"></i>批量删除</button>
+                            <button class="layui-btn" onclick="xadmin.open('添加用户','./order-add.html',800,600)">
+                                <i class="layui-icon"></i>添加</button></div>
+                        <div class="layui-card-body ">
+                            <div id="table"></div>
+                            <div id="pageBar"></div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="layui-col-sm12 layui-col-md6">
-            <div class="layui-card">
-                <div class="layui-card-header">硬盘使用量</div>
-                <div class="layui-card-body" style="min-height: 280px;">
-                    <div id="main4" class="layui-col-sm12" style="height: 300px;"></div>
-
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 </div>
 
+
+<script LANGUAGE="javascript">
+    var json = [
+        {
+            id: '01',
+            source_name: '中国裁判文书网',
+            url: 'http://wenshu.court.gov.cn/Index',
+            dimensions: '裁判文书',
+            yesterday_num: '1000000',
+            today_num: '1100000',
+            owner: '袁少航',
+            last_select_time: '2017-08-17 18:22'
+        },
+        {
+            id: '02',
+            source_name: '中国裁判文书网',
+            url: 'http://wenshu.court.gov.cn/Index',
+            dimensions: '裁判文书',
+            yesterday_num: '1000000',
+            today_num: '1100000',
+            owner: '袁少航',
+            last_select_time: '2017-08-17 18:22'
+        },
+        {
+            id: '03',
+            source_name: '中国裁判文书网',
+            url: 'http://wenshu.court.gov.cn/Index',
+            dimensions: '裁判文书',
+            yesterday_num: '1000000',
+            today_num: '1100000',
+            owner: '袁少航',
+            last_select_time: '2017-08-17 18:22'
+        },
+        {
+            id: '04',
+            source_name: '中国裁判文书网',
+            url: 'http://wenshu.court.gov.cn/Index',
+            dimensions: '裁判文书',
+            yesterday_num: '1000000',
+            today_num: '1100000',
+            owner: '袁少航',
+            last_select_time: '2017-08-17 18:22'
+        },
+        {
+            id: '05',
+            source_name: '中国裁判文书网',
+            url: 'http://wenshu.court.gov.cn/Index',
+            dimensions: '裁判文书',
+            yesterday_num: '1000000',
+            today_num: '1100000',
+            owner: '袁少航',
+            last_select_time: '2017-08-17 18:22'
+        },
+        {
+            id: '06',
+            source_name: '中国裁判文书网',
+            url: 'http://wenshu.court.gov.cn/Index',
+            dimensions: '裁判文书',
+            yesterday_num: '1000000',
+            today_num: '1100000',
+            owner: '袁少航',
+            last_select_time: '2017-08-17 18:22'
+        },
+        {
+            id: '07',
+            source_name: '中国裁判文书网',
+            url: 'http://wenshu.court.gov.cn/Index',
+            dimensions: '裁判文书',
+            yesterday_num: '1000000',
+            today_num: '1100000',
+            owner: '袁少航',
+            last_select_time: '2017-08-17 18:22'
+        },
+        {
+            id: '08',
+            source_name: '中国裁判文书网',
+            url: 'http://wenshu.court.gov.cn/Index',
+            dimensions: '裁判文书',
+            yesterday_num: '1000000',
+            today_num: '1100000',
+            owner: '袁少航',
+            last_select_time: '2017-08-17 18:22'
+        },
+        {
+            id: '09',
+            source_name: '中国裁判文书网',
+            url: 'http://wenshu.court.gov.cn/Index',
+            dimensions: '裁判文书',
+            yesterday_num: '1000000',
+            today_num: '1100000',
+            owner: '袁少航',
+            last_select_time: '2017-08-17 18:22'
+        },
+        {
+            id: '10',
+            source_name: '中国裁判文书网',
+            url: 'http://wenshu.court.gov.cn/Index',
+            dimensions: '裁判文书',
+            yesterday_num: '1000000',
+            today_num: '1100000',
+            owner: '袁少航',
+            last_select_time: '2017-08-17 18:22'
+        },
+        {
+            id: '11',
+            source_name: '中国裁判文书网',
+            url: 'http://wenshu.court.gov.cn/Index',
+            dimensions: '裁判文书',
+            yesterday_num: '1000000',
+            today_num: '1100000',
+            owner: '袁少航',
+            last_select_time: '2017-08-17 18:22'
+        },
+    ];
+
+    for (var i=0;i<json.length;i++) {
+        json[i]['caozuo'] = "<a title=\"编辑\" onclick=\"xadmin.open('编辑','{% url 'editimport' %}',600,400)\" href=\"javascript:;\"><i class=\"layui-icon\">&#xe63c;</i></a><a title=\"删除\" onclick=\"datadel(this,'要删除的id')\" href=\"javascript:;\"><i class=\"layui-icon\">&#xe640;</i></a>";
+    }
+
+    //nameList与widthList的数组长度要一致
+	var nameList = ['ID', '数据源名称', 'url', '维度', '昨日总量', '当前总量', '所属人', '最近查询时间', '操作']; //table的列名
+	var widthList = [10,10,10,10,10,10,10,10,10]; //table每列的宽度
+    $(function () {
+		nicePage.setCfg({
+			table: 'table',
+			bar: 'pageBar',
+			limit: 7,
+			color: '#1E9FFF',
+			layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+		});
+	}); //初始化完成
+</script>
+
+<script language="JavaScript">
+    {#var tr = document.getElementsByClassName('biaoshi');#}
+    {#tr.innerHTML = '<td><a title="编辑" onclick="xadmin.open(\'编辑\',\'order-view.html\')" href="javascript:;">\n' +#}
+    {#    '                                                <i class="layui-icon">&#xe63c;</i></a>\n' +#}
+    {#    '                                            <a title="删除" onclick="member_del(this,\'要删除的id\')" href="javascript:;">\n' +#}
+    {#    '                                                <i class="layui-icon">&#xe640;</i></a></td>';#}
+    {#delCell.innerHTML = '<a title="编辑" onclick="xadmin.open(\'编辑\',\'order-view.html\')" href="javascript:;">\n' +#}
+    {#    '                                                <i class="layui-icon">&#xe63c;</i></a>\n' +#}
+    {#    '                                            <a title="删除" onclick="member_del(this,\'要删除的id\')" href="javascript:;">\n' +#}
+    {#    '                                                <i class="layui-icon">&#xe640;</i></a>';#}
+    {#delCell.className = 'td-manage';#}
+    {#delCell.style.textAlign = 'center';#}
+    {#tr.appendChild(delCell);#}
+
+</script>
+
+<script>layui.use(['laydate', 'form'],
+        function() {
+            var laydate = layui.laydate;
+
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#start' //指定元素
+            });
+
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#end' //指定元素
+            });
+        });
+
+        /*用户-停用*/
+        function member_stop(obj, id) {
+            layer.confirm('确认要停用吗？',
+            function(index) {
+
+                if ($(obj).attr('title') == '启用') {
+
+                    //发异步把用户状态进行更改
+                    $(obj).attr('title', '停用');
+                    $(obj).find('i').html('&#xe62f;');
+
+                    $(obj).parents("tr").find(".td-status").find('span').addClass('layui-btn-disabled').html('已停用');
+                    layer.msg('已停用!', {
+                        icon: 5,
+                        time: 1000
+                    });
+
+                } else {
+                    $(obj).attr('title', '启用');
+                    $(obj).find('i').html('&#xe601;');
+
+                    $(obj).parents("tr").find(".td-status").find('span').removeClass('layui-btn-disabled').html('已启用');
+                    layer.msg('已启用!', {
+                        icon: 5,
+                        time: 1000
+                    });
+                }
+
+            });
+        }
+
+        /*用户-删除*/
+        function datadel(obj, id) {
+            layer.confirm('确认要删除吗？',
+            function(index) {
+                //发异步删除数据
+                $(obj).parents(".tr").remove();
+                layer.msg('已删除!', {
+                    icon: 1,
+                    time: 1000
+                });
+            });
+        }
+
+        function delAll(argument) {
+
+            var data = tableCheck.getData();
+
+            layer.confirm('确认要删除吗？' + data,
+            function(index) {
+                //捉到所有被选中的，发异步进行删除
+                layer.msg('删除成功', {
+                    icon: 1
+                });
+                $(".layui-form-checked").not('.header').parents('tr').remove();
+            });
+}</script>
+<script type="text/javascript">
+    function checkForm(form) {
+        if (form.dimensions.value == "") {
+            alert("维度不能为空!");
+            form.dimensions.focus();
+            return false;
+        }
+        if (form.startdate.value > form.enddate.value) {
+            alert('开始时间不能大于结束时间');
+            form.startdate.focus();
+            return false;
+        }
+        return true;
+    }
+</script>
+<script>
+    $(document).ready(function () {
+
+        //日期时间计算
+        function getBeforeDate(n) {
+            var n = n;
+            var d = new Date();
+            var year = d.getFullYear();
+            var mon = d.getMonth() + 1;
+            var day = d.getDate();
+            if (day <= n) {
+                if (mon > 1) {
+                    mon = mon - 1;
+                } else {
+                    year = year - 1;
+                    mon = 12;
+                }
+            }
+            d.setDate(d.getDate() - n);
+            year = d.getFullYear();
+            mon = d.getMonth() + 1;
+            day = d.getDate();
+            s = year + "-" + (mon < 10 ? ('0' + mon) : mon) + "-" + (day < 10 ? ('0' + day) : day);
+            return s;
+        }
+
+        $('#startdate').val(getBeforeDate(6));
+        $('#enddate').val(getBeforeDate(0));
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        function getMonthDate(n) {
+            var n = n;
+            var date = new Date();
+            var year = date.getFullYear();
+            var month = (date.getMonth() - n);
+            var yue = year + "-" + (month < 10 ? ('0' + month) : month);
+            return yue;
+        }
+
+        $('#startmonth').val(getMonthDate(5));
+        $('#endmonth').val(getMonthDate(0));
+    });
+
+</script>
 <script>
     function edit_database(new_value) {
         var data = new_value;
         document.getElementById('database').value = data;
+        {#$('#L_pass').textbox(new_value,old_value);#}
+    }
+
+    function edit_database1(new_value) {
+        var data = new_value;
+        document.getElementById('database1').value = data;
         {#$('#L_pass').textbox(new_value,old_value);#}
     }
 </script>
@@ -121,14 +483,19 @@
         },
         xAxis: {
             type: 'category',
-            data: ['{{ new_num.four_day }}', '{{ new_num.five_day }}', '{{ new_num.six_day }}', '{{ new_num.now }}']
+            data: ['{{ new_num.seven_day }}', '{{ new_num.six_day }}', '{{ new_num.five_day }}', '{{ new_num.four_day }}', '{{ new_num.three_day }}', '{{ new_num.two_day }}', '{{ new_num.one_day }}']
         },
         yAxis: {
             type: 'value'
         },
         series: [{
+            name: '总数',
+            data: ['{{ new_num.seven_num }}', '{{ new_num.six_num }}', '{{ new_num.five_num }}', '{{ new_num.four_num }}', '{{ new_num.three_num }}', '{{ new_num.two_num }}', '{{ new_num.one_num }}'],
+            type: 'line',
+            smooth: true
+        }, {
             name: '增量数',
-            data: ['{{ new_num.monday }}', '{{ new_num.tuesday }}', '{{ new_num.wednesday }}', '{{ new_num.thursday }}'],
+            data: ['{{ new_num.seven }}', '{{ new_num.six }}', '{{ new_num.five }}', '{{ new_num.four }}', '{{ new_num.three }}', '{{ new_num.two }}', '{{ new_num.one }}'],
             type: 'line',
             smooth: true
         }]
@@ -143,51 +510,34 @@
 
     // 指定图表的配置项和数据
     var option = {
-        tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-                type: 'cross',
-                label: {
-                    backgroundColor: '#6a7985'
-                }
-            }
-        },
         grid: {
             top: '5%',
-            right: '2%',
+            right: '1%',
             left: '1%',
             bottom: '10%',
             containLabel: true
         },
-        xAxis: [
-            {
-                type: 'category',
-                boundaryGap: false,
-                data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-            }
-        ],
-        yAxis: [
-            {
-                type: 'value'
-            }
-        ],
-        series: [
-            {
-                name: 'PV',
-                type: 'line',
-                areaStyle: {normal: {}},
-                data: [120, 132, 101, 134, 90, 230, 210],
-                smooth: true
-            },
-            {
-                name: 'UV',
-                type: 'line',
-                areaStyle: {normal: {}},
-                data: [45, 182, 191, 234, 290, 330, 310],
-                smooth: true,
-
-            }
-        ]
+        tooltip: {
+            trigger: 'axis'
+        },
+        xAxis: {
+            type: 'category',
+            data: ['{{ new_num.one_month }}', '{{ new_num.two_month }}', '{{ new_num.three_month }}', '{{ new_num.four_month }}', '{{ new_num.five_month }}', '{{ new_num.six_month }}']
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [{
+            name: '总数',
+            data: ['{{ new_num.one_month_count }}', '{{ new_num.two_month_count }}', '{{ new_num.three_month_count }}', '{{ new_num.four_month_count }}', '{{ new_num.five_month_count }}', '{{ new_num.six_month_count }}'],
+            type: 'line',
+            smooth: true
+        }, {
+            name: '增量数',
+            data: ['{{ new_num.one_month_add }}', '{{ new_num.two_month_add }}', '{{ new_num.three_month_add }}', '{{ new_num.four_month_add }}', '{{ new_num.five_month_add }}', '{{ new_num.six_month_add }}'],
+            type: 'line',
+            smooth: true
+        }]
     };
 
 

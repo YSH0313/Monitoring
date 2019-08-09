@@ -4,9 +4,13 @@ from . import models
 from django.core.paginator import Paginator
 import datetime
 import hashlib
+import arrow
 
 
 # Create your views here.
+def order_view(request):
+    return render(request, 'moniter/order-view.html')
+
 def login(request):
     username_login = request.POST.get('username')
     password_login = request.POST.get('password')
@@ -44,78 +48,302 @@ def welcome(request):
 
 
 def welcome_first(request):
-    # count = models.app_num.objects.count()
-    new_num = {}
-    num = models.data_count.objects.get(pk=1)
-    new_num['monday'] = num.monday
-    new_num['tuesday'] = num.tuesday - num.monday
-    new_num['wednesday'] = num.wednesday - num.tuesday
-    new_num['thursday'] = num.thursday - num.wednesday
-
     def getYesterday(num):
         today = datetime.date.today()
         twoday = datetime.timedelta(days=num)
         yesterday = today - twoday
         return str(yesterday)
 
-    new_num['four_day'] = getYesterday(3)
-    new_num['five_day'] = getYesterday(2)
-    new_num['six_day'] = getYesterday(1)
-    new_num['now'] = getYesterday(0)
+    def getMonth(num):
+        month = arrow.now()
+        twomonth = month.shift(months=-num).format("YYYY-MM")
+        return twomonth
 
-    data_base = {}
+    important_all = models.important_source.objects.all()
 
-    data_base['data_base'] = [
-        'data_base1',
-        'data_base2',
-        'data_base3',
-        'qaz',
-        'moniter_app_num',
-    ]
+    if request.method == 'GET':
+        new_num = {}
 
-    return render(request, 'moniter/welcome1.html', {'new_num': new_num, 'data_base': data_base})
+        one = models.data_count.objects.get(time_date=getYesterday(0), dimensions='裁判文书').count
+        two = models.data_count.objects.get(time_date=getYesterday(1), dimensions='裁判文书').count
+        three = models.data_count.objects.get(time_date=getYesterday(2), dimensions='裁判文书').count
+        four = models.data_count.objects.get(time_date=getYesterday(3), dimensions='裁判文书').count
+        five = models.data_count.objects.get(time_date=getYesterday(4), dimensions='裁判文书').count
+        six = models.data_count.objects.get(time_date=getYesterday(5), dimensions='裁判文书').count
+        seven = models.data_count.objects.get(time_date=getYesterday(6), dimensions='裁判文书').count
+        eight = models.data_count.objects.get(time_date=getYesterday(7), dimensions='裁判文书').count
+
+        new_num['one_num'] = one
+        new_num['two_num'] = two
+        new_num['three_num'] = three
+        new_num['four_num'] = four
+        new_num['five_num'] = five
+        new_num['six_num'] = six
+        new_num['seven_num'] = seven
+
+        new_num['seven'] = seven-eight
+        new_num['six'] = six - seven
+        new_num['five'] = five - six
+        new_num['four'] = four - five
+        new_num['three'] = three - four
+        new_num['two'] = two - three
+        new_num['one'] = one - two
+
+        new_num['one_day'] = getYesterday(0)
+        new_num['two_day'] = getYesterday(1)
+        new_num['three_day'] = getYesterday(2)
+        new_num['four_day'] = getYesterday(3)
+        new_num['five_day'] = getYesterday(4)
+        new_num['six_day'] = getYesterday(5)
+        new_num['seven_day'] = getYesterday(6)
+
+        one_month_num = models.month_datacount.objects.get(time_date=getMonth(6), dimensions='裁判文书').count
+        two_month_num = models.month_datacount.objects.get(time_date=getMonth(5), dimensions='裁判文书').count
+        three_month_num = models.month_datacount.objects.get(time_date=getMonth(4), dimensions='裁判文书').count
+        four_month_num = models.month_datacount.objects.get(time_date=getMonth(3), dimensions='裁判文书').count
+        five_month_num = models.month_datacount.objects.get(time_date=getMonth(2), dimensions='裁判文书').count
+        six_month_num = models.month_datacount.objects.get(time_date=getMonth(1), dimensions='裁判文书').count
+        seven_month_num = models.month_datacount.objects.get(time_date=getMonth(0), dimensions='裁判文书').count
+
+        new_num['one_month_count'] = one_month_num
+        new_num['two_month_count'] = two_month_num
+        new_num['three_month_count'] = three_month_num
+        new_num['four_month_count'] = four_month_num
+        new_num['five_month_count'] = five_month_num
+        new_num['six_month_count'] = six_month_num
+        new_num['seven_month_count'] = seven_month_num
+        # print(one_month_num, two_month_num, three_month_num, four_month_num, five_month_num, six_month_num, seven_month_num)
+
+        new_num['one_month_add'] = two_month_num - one_month_num
+        new_num['two_month_add'] = three_month_num - two_month_num
+        new_num['three_month_add'] = four_month_num - three_month_num
+        new_num['four_month_add'] = five_month_num - four_month_num
+        new_num['five_month_add'] = six_month_num - five_month_num
+        new_num['six_month_add'] = seven_month_num - six_month_num
+
+        new_num['one_month'] = getMonth(6)
+        new_num['two_month'] = getMonth(5)
+        new_num['three_month'] = getMonth(4)
+        new_num['four_month'] = getMonth(3)
+        new_num['five_month'] = getMonth(2)
+        new_num['six_month'] = getMonth(1)
+        new_num['seven_month'] = getMonth(0)
 
 
-def edit_selectbase(request):
-    new_num = {}
-    num = models.data_count.objects.get(pk=1)
-    new_num['monday'] = num.monday
-    new_num['tuesday'] = num.tuesday - num.monday
-    new_num['wednesday'] = num.wednesday - num.tuesday
-    new_num['thursday'] = num.thursday - num.wednesday
+        dimensions = {}
+        dimensions['dimensions'] = [
+            'dimensions1',
+            'dimensions2',
+            'dimensions3',
+            '裁判文书',
+            '开庭公告',
+        ]
+        return render(request, 'moniter/welcome1.html', {'new_num': new_num, 'dimensions': dimensions, 'important_all': important_all})
 
-    def getYesterday(num):
-        today = datetime.date.today()
-        twoday = datetime.timedelta(days=num)
-        yesterday = today - twoday
-        return str(yesterday)
+    elif request.method == 'POST':
+        num = {}
+        new_num = {}
+        dimensions = request.POST.get('dimensions')
+        startdate = request.POST.get('startdate')
+        enddate = request.POST.get('enddate')
+        type_check = request.POST.get('month')
 
-    new_num['four_day'] = getYesterday(3)
-    new_num['five_day'] = getYesterday(2)
-    new_num['six_day'] = getYesterday(1)
-    new_num['now'] = getYesterday(0)
+        if type_check != 'month':
+            one_month_num = models.month_datacount.objects.get(time_date=getMonth(6), dimensions='裁判文书').count
+            two_month_num = models.month_datacount.objects.get(time_date=getMonth(5), dimensions='裁判文书').count
+            three_month_num = models.month_datacount.objects.get(time_date=getMonth(4), dimensions='裁判文书').count
+            four_month_num = models.month_datacount.objects.get(time_date=getMonth(3), dimensions='裁判文书').count
+            five_month_num = models.month_datacount.objects.get(time_date=getMonth(2), dimensions='裁判文书').count
+            six_month_num = models.month_datacount.objects.get(time_date=getMonth(1), dimensions='裁判文书').count
+            seven_month_num = models.month_datacount.objects.get(time_date=getMonth(0), dimensions='裁判文书').count
 
-    data_base = {}
+            new_num['one_month_count'] = one_month_num
+            new_num['two_month_count'] = two_month_num
+            new_num['three_month_count'] = three_month_num
+            new_num['four_month_count'] = four_month_num
+            new_num['five_month_count'] = five_month_num
+            new_num['six_month_count'] = six_month_num
+            new_num['seven_month_count'] = seven_month_num
+            # print(one_month_num, two_month_num, three_month_num, four_month_num, five_month_num, six_month_num, seven_month_num)
 
-    data_base['data_base'] = [
-        'data_base1',
-        'data_base2',
-        'data_base3',
-        'qaz',
-        'moniter_app_num',
-    ]
+            new_num['one_month_add'] = two_month_num - one_month_num
+            new_num['two_month_add'] = three_month_num - two_month_num
+            new_num['three_month_add'] = four_month_num - three_month_num
+            new_num['four_month_add'] = five_month_num - four_month_num
+            new_num['five_month_add'] = six_month_num - five_month_num
+            new_num['six_month_add'] = seven_month_num - six_month_num
 
-    database_name = request.POST.get('data_base')
-    print(database_name)
-    data = models.data_count.objects.filter(database_name=database_name)[0]
-    print(data.monday, data.tuesday, data.wednesday, data.thursday)
-    new_num['monday'] = data.monday
-    new_num['tuesday'] = data.tuesday - data.monday
-    new_num['wednesday'] = data.wednesday - data.tuesday
-    new_num['thursday'] = data.thursday - data.wednesday
+            new_num['one_month'] = getMonth(6)
+            new_num['two_month'] = getMonth(5)
+            new_num['three_month'] = getMonth(4)
+            new_num['four_month'] = getMonth(3)
+            new_num['five_month'] = getMonth(2)
+            new_num['six_month'] = getMonth(1)
+            new_num['seven_month'] = getMonth(0)
 
-    return render(request, 'moniter/welcome1.html',
-                  {'new_num': new_num, 'data_base': data_base, 'database_name': database_name})
+
+            start_year = int(startdate[:4])
+            start_month = int(startdate[5:7].replace('0', ''))
+            start_day = int(startdate[8:10].replace('0', ''))
+            end_month = int(enddate[5:7].replace('0', ''))
+            end_day = int(enddate[8:10].replace('0', ''))
+            # print(start_year, start_month, start_day, end_month, end_day)
+            for d in range(start_year, start_year+1):
+                begin = datetime.date(d, start_month, start_day)
+                end = datetime.date(d, end_month, end_day)
+                for k, v in enumerate(range((end - begin).days + 1)):
+                    day = begin + datetime.timedelta(days=v)
+                    data = models.data_count.objects.get(time_date=day, dimensions=dimensions)
+                    num[k] = data.count
+                    # print(day, dimensions, data.count)
+
+            one_num = num[0]
+            two_num = num[1]
+            three_num = num[2]
+            four_num = num[3]
+            five_num = num[4]
+            six_num = num[5]
+            seven_num = num[6]
+            eight_num = models.data_count.objects.get(time_date=getYesterday(7), dimensions=dimensions).count
+
+            new_num['one_num'] = seven_num
+            new_num['two_num'] = six_num
+            new_num['three_num'] = five_num
+            new_num['four_num'] = four_num
+            new_num['five_num'] = three_num
+            new_num['six_num'] = two_num
+            new_num['seven_num'] = one_num
+            new_num['eight_num'] = eight_num
+
+            new_num['seven'] = one_num - eight_num
+            new_num['six'] = two_num - one_num
+            new_num['five'] = three_num - two_num
+            new_num['four'] = four_num - three_num
+            new_num['three'] = five_num - four_num
+            new_num['two'] = six_num - five_num
+            new_num['one'] = seven_num - six_num
+
+            new_num['one_day'] = getYesterday(0)
+            new_num['two_day'] = getYesterday(1)
+            new_num['three_day'] = getYesterday(2)
+            new_num['four_day'] = getYesterday(3)
+            new_num['five_day'] = getYesterday(4)
+            new_num['six_day'] = getYesterday(5)
+            new_num['seven_day'] = getYesterday(6)
+
+            dimensions_map = {}
+            dimensions_map['dimensions'] = [
+                'dimensions1',
+                'dimensions2',
+                'dimensions3',
+                '裁判文书',
+                '开庭公告',
+            ]
+            info = {'staartdate': startdate, 'endate': enddate, 'dimensions_name': dimensions}
+            return render(request, 'moniter/welcome1.html', {'new_num': new_num, 'dimensions': dimensions_map, 'info': info, 'important_all': important_all})
+
+        elif type_check == 'month':
+            one = models.data_count.objects.get(time_date=getYesterday(0), dimensions='裁判文书').count
+            two = models.data_count.objects.get(time_date=getYesterday(1), dimensions='裁判文书').count
+            three = models.data_count.objects.get(time_date=getYesterday(2), dimensions='裁判文书').count
+            four = models.data_count.objects.get(time_date=getYesterday(3), dimensions='裁判文书').count
+            five = models.data_count.objects.get(time_date=getYesterday(4), dimensions='裁判文书').count
+            six = models.data_count.objects.get(time_date=getYesterday(5), dimensions='裁判文书').count
+            seven = models.data_count.objects.get(time_date=getYesterday(6), dimensions='裁判文书').count
+            eight = models.data_count.objects.get(time_date=getYesterday(7), dimensions='裁判文书').count
+
+            new_num['one_num'] = one
+            new_num['two_num'] = two
+            new_num['three_num'] = three
+            new_num['four_num'] = four
+            new_num['five_num'] = five
+            new_num['six_num'] = six
+            new_num['seven_num'] = seven
+
+            new_num['seven'] = seven - eight
+            new_num['six'] = six - seven
+            new_num['five'] = five - six
+            new_num['four'] = four - five
+            new_num['three'] = three - four
+            new_num['two'] = two - three
+            new_num['one'] = one - two
+
+            new_num['one_day'] = getYesterday(0)
+            new_num['two_day'] = getYesterday(1)
+            new_num['three_day'] = getYesterday(2)
+            new_num['four_day'] = getYesterday(3)
+            new_num['five_day'] = getYesterday(4)
+            new_num['six_day'] = getYesterday(5)
+            new_num['seven_day'] = getYesterday(6)
+
+
+            dimensions = request.POST.get('dimensions')
+            startdate = request.POST.get('startmonth')
+            enddate = request.POST.get('endmonth')
+            start_year = int(startdate[:4])
+            start_month = int(startdate[5:7].replace('0', ''))
+            end_month = int(enddate[5:7].replace('0', ''))
+            for d in range(start_year, start_year + 1):
+                for k, m in enumerate(range(start_month, end_month+1)):
+                    if m >= 10:
+                        month = str(start_year) + "-" + str(m)
+                    else:
+                        month = str(start_year) + "-0" + str(m)
+                    data = models.month_datacount.objects.get(time_date=month, dimensions=dimensions)
+                    num[k] = data.count
+
+            one_month_num = num[0]
+            two_month_num = num[1]
+            three_month_num = num[2]
+            four_month_num = num[3]
+            five_month_num = num[4]
+            six_month_num = num[5]
+            if end_month == 12:
+                seven_month_num = models.month_datacount.objects.get(time_date=enddate, dimensions=dimensions).count
+            else:
+                start_month = start_month-1
+                if start_month < 10:
+                    time_date = str(start_year)+"-0"+str(start_month)
+                else:
+                    time_date = str(start_year) + "-" + str(start_month)
+                seven_month_num = models.month_datacount.objects.get(time_date=time_date, dimensions=dimensions).count
+            # print(enddate, six_month_num, seven_month_num)
+
+            new_num['one_month_count'] = one_month_num
+            new_num['two_month_count'] = two_month_num
+            new_num['three_month_count'] = three_month_num
+            new_num['four_month_count'] = four_month_num
+            new_num['five_month_count'] = five_month_num
+            new_num['six_month_count'] = six_month_num
+            new_num['seven_month_count'] = seven_month_num
+            # print(one_month_num, two_month_num, three_month_num, four_month_num, five_month_num, six_month_num, seven_month_num)
+
+            new_num['one_month_add'] = one_month_num - seven_month_num
+            new_num['two_month_add'] = two_month_num - one_month_num
+            new_num['three_month_add'] = three_month_num - two_month_num
+            new_num['four_month_add'] = four_month_num - three_month_num
+            new_num['five_month_add'] = five_month_num - four_month_num
+            new_num['six_month_add'] = six_month_num - five_month_num
+
+            new_num['one_month'] = getMonth(6)
+            new_num['two_month'] = getMonth(5)
+            new_num['three_month'] = getMonth(4)
+            new_num['four_month'] = getMonth(3)
+            new_num['five_month'] = getMonth(2)
+            new_num['six_month'] = getMonth(1)
+            new_num['seven_month'] = getMonth(0)
+
+            dimensions_map = {}
+            dimensions_map['dimensions'] = [
+                'dimensions1',
+                'dimensions2',
+                'dimensions3',
+                '裁判文书',
+                '开庭公告',
+            ]
+            infos = {'startmonth': startdate, 'endmonth': enddate, 'dimensions_name': dimensions}
+            return render(request, 'moniter/welcome1.html',
+                          {'new_num': new_num, 'dimensions': dimensions_map, 'infos': infos, 'important_all': important_all})
 
 
 def order(request):
@@ -133,7 +361,7 @@ def member(request):
     else:
         page = 1
     all_spider = models.spider_lists.objects.all()
-    paginator = Paginator(all_spider, 2)
+    paginator = Paginator(all_spider, 10)
     page_num = paginator.num_pages
     page_spider_list = paginator.page(page)
     if page_spider_list.has_next():
@@ -335,6 +563,198 @@ def json_data(request):
                     "id": 90,
                     "titel": "小学"
                 }
+            },
+            {
+                "id": "10009",
+                "username": "贤心",
+                "email": "xianxin@layui.com",
+                "sex": "男",
+                "city": "浙江杭州",
+                "sign": "人生恰似一场修行",
+                "experience": "106",
+                "ip": "192.168.0.8",
+                "logins": "106",
+                "joinTime": "2016-10-14",
+                "dw_xinzhi": {
+                    "id": 90,
+                    "titel": "小学"
+                }
+            },
+            {
+                "id": "10010",
+                "username": "贤心",
+                "email": "xianxin@layui.com",
+                "sex": "男",
+                "city": "浙江杭州",
+                "sign": "人生恰似一场修行",
+                "experience": "106",
+                "ip": "192.168.0.8",
+                "logins": "106",
+                "joinTime": "2016-10-14",
+                "dw_xinzhi": {
+                    "id": 90,
+                    "titel": "小学"
+                }
             }
+            # {
+            #     "id": "10011",
+            #     "username": "贤心",
+            #     "email": "xianxin@layui.com",
+            #     "sex": "男",
+            #     "city": "浙江杭州",
+            #     "sign": "人生恰似一场修行",
+            #     "experience": "106",
+            #     "ip": "192.168.0.8",
+            #     "logins": "106",
+            #     "joinTime": "2016-10-14",
+            #     "dw_xinzhi": {
+            #         "id": 90,
+            #         "titel": "小学"
+            #     }
+            # },
+            # {
+            #     "id": "10012",
+            #     "username": "贤心",
+            #     "email": "xianxin@layui.com",
+            #     "sex": "男",
+            #     "city": "浙江杭州",
+            #     "sign": "人生恰似一场修行",
+            #     "experience": "106",
+            #     "ip": "192.168.0.8",
+            #     "logins": "106",
+            #     "joinTime": "2016-10-14",
+            #     "dw_xinzhi": {
+            #         "id": 90,
+            #         "titel": "小学"
+            #     }
+            # },
+            # {
+            #     "id": "10013",
+            #     "username": "贤心",
+            #     "email": "xianxin@layui.com",
+            #     "sex": "男",
+            #     "city": "浙江杭州",
+            #     "sign": "人生恰似一场修行",
+            #     "experience": "106",
+            #     "ip": "192.168.0.8",
+            #     "logins": "106",
+            #     "joinTime": "2016-10-14",
+            #     "dw_xinzhi": {
+            #         "id": 90,
+            #         "titel": "小学"
+            #     }
+            # },
+            # {
+            #     "id": "10014",
+            #     "username": "贤心",
+            #     "email": "xianxin@layui.com",
+            #     "sex": "男",
+            #     "city": "浙江杭州",
+            #     "sign": "人生恰似一场修行",
+            #     "experience": "106",
+            #     "ip": "192.168.0.8",
+            #     "logins": "106",
+            #     "joinTime": "2016-10-14",
+            #     "dw_xinzhi": {
+            #         "id": 90,
+            #         "titel": "小学"
+            #     }
+            # },
+            # {
+            #     "id": "10015",
+            #     "username": "贤心",
+            #     "email": "xianxin@layui.com",
+            #     "sex": "男",
+            #     "city": "浙江杭州",
+            #     "sign": "人生恰似一场修行",
+            #     "experience": "106",
+            #     "ip": "192.168.0.8",
+            #     "logins": "106",
+            #     "joinTime": "2016-10-14",
+            #     "dw_xinzhi": {
+            #         "id": 90,
+            #         "titel": "小学"
+            #     }
+            # },
+            # {
+            #     "id": "10016",
+            #     "username": "贤心",
+            #     "email": "xianxin@layui.com",
+            #     "sex": "男",
+            #     "city": "浙江杭州",
+            #     "sign": "人生恰似一场修行",
+            #     "experience": "106",
+            #     "ip": "192.168.0.8",
+            #     "logins": "106",
+            #     "joinTime": "2016-10-14",
+            #     "dw_xinzhi": {
+            #         "id": 90,
+            #         "titel": "小学"
+            #     }
+            # },
+            # {
+            #     "id": "10017",
+            #     "username": "贤心",
+            #     "email": "xianxin@layui.com",
+            #     "sex": "男",
+            #     "city": "浙江杭州",
+            #     "sign": "人生恰似一场修行",
+            #     "experience": "106",
+            #     "ip": "192.168.0.8",
+            #     "logins": "106",
+            #     "joinTime": "2016-10-14",
+            #     "dw_xinzhi": {
+            #         "id": 90,
+            #         "titel": "小学"
+            #     }
+            # },
+            # {
+            #     "id": "10018",
+            #     "username": "贤心",
+            #     "email": "xianxin@layui.com",
+            #     "sex": "男",
+            #     "city": "浙江杭州",
+            #     "sign": "人生恰似一场修行",
+            #     "experience": "106",
+            #     "ip": "192.168.0.8",
+            #     "logins": "106",
+            #     "joinTime": "2016-10-14",
+            #     "dw_xinzhi": {
+            #         "id": 90,
+            #         "titel": "小学"
+            #     }
+            # },
+            # {
+            #     "id": "10019",
+            #     "username": "贤心",
+            #     "email": "xianxin@layui.com",
+            #     "sex": "男",
+            #     "city": "浙江杭州",
+            #     "sign": "人生恰似一场修行",
+            #     "experience": "106",
+            #     "ip": "192.168.0.8",
+            #     "logins": "106",
+            #     "joinTime": "2016-10-14",
+            #     "dw_xinzhi": {
+            #         "id": 90,
+            #         "titel": "小学"
+            #     }
+            # },
+            # {
+            #     "id": "10020",
+            #     "username": "贤心",
+            #     "email": "xianxin@layui.com",
+            #     "sex": "男",
+            #     "city": "浙江杭州",
+            #     "sign": "人生恰似一场修行",
+            #     "experience": "106",
+            #     "ip": "192.168.0.8",
+            #     "logins": "106",
+            #     "joinTime": "2016-10-14",
+            #     "dw_xinzhi": {
+            #         "id": 90,
+            #         "titel": "小学"
+            #     }
+            # }
         ]}
     return JsonResponse(d)

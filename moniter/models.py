@@ -10,14 +10,22 @@ class user(models.Model):
     phone = models.CharField(max_length=255)
 
 class data_count(models.Model):
-    monday = models.IntegerField(default=0)
-    tuesday = models.IntegerField(default=0)
-    wednesday = models.IntegerField(default=0)
-    thursday = models.IntegerField(default=0)
-    friday = models.IntegerField(default=0)
-    database_name = models.CharField(max_length=255)
+    count = models.IntegerField(default=0, null=True)
+    dimensions = models.CharField(max_length=255, null=True)
+    time_date = models.CharField(max_length=30, null=True)
 
+class month_datacount(models.Model):
+    count = models.IntegerField(default=0, null=True)
+    dimensions = models.CharField(max_length=255, null=True)
+    time_date = models.CharField(max_length=30, null=True)
 
+class important_source(models.Model):
+    source_name = models.CharField(max_length=255, null=True)
+    url = models.CharField(max_length=255, null=True)
+    dimensions = models.CharField(max_length=255, null=True)
+    yesterday_num = models.CharField(max_length=255, null=True)
+    today_num = models.CharField(max_length=255, null=True)
+    owner = models.CharField(max_length=255, null=True)
 
 class app_num(models.Model):
     rank = models.CharField(max_length=255, null=True)

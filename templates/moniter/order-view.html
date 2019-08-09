@@ -1,0 +1,86 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html class="x-admin-sm">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.2</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+	<link href="{% static 'moniter/css/layui.css' %}" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'moniter/css/font.css' %}">
+    <link rel="stylesheet" href="{% static 'moniter/css/xadmin.css' %}">
+    <script src="{% static 'moniter/lib/layui/layui.js' %}" charset="utf-8"></script>
+    <script type="text/javascript" src="{% static 'moniter/js/xadmin.js' %}"></script>
+    <!--[if lt IE 9]>
+          <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+          <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+{#    <script language="Javascript" src="{% static 'moniter/js/layui.js' %}"></script>#}
+    <script language="Javascript" src="{% static 'moniter/js/nicePage.js' %}"></script>
+
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-row">
+        <form class="layui-form" action="{% url 'edit_action' %}" method="post">
+        {% csrf_token %}
+            <input type="hidden" name="spider_id" value="{{ data.spider_id }}">
+            <div class="layui-form-item">
+                <label for="L_email" class="layui-form-label">
+                    <span class="x-red">*</span><nobr>数据源名称</nobr>
+                </label>
+                <div class="layui-input-inline">
+                    <input required="" lay-verify="email" autocomplete="off" name="interval_time"
+                           class="layui-input" value="{{ data.interval_time }}"></div>
+                <div class="layui-form-mid layui-word-aux">
+                    <span class="x-red">*</span>官网名称
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_username" class="layui-form-label">
+                    <span class="x-red">*</span><nobr>url</nobr>
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_username" name="data_base" required="" lay-verify="nikename"
+                           autocomplete="off" class="layui-input" value="{{ data.data_base }}"></div>
+                <div class="layui-form-mid layui-word-aux">
+                    <span class="x-red">*</span>数据源所属url
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="L_pass" class="layui-form-label">
+                    <span class="x-red">*</span><nobr>所属人</nobr>
+                </label>
+                <div class="layui-input-inline">
+                    <input type="type" id="L_pass" name="server" required="" lay-verify="pass" autocomplete="off"
+                           class="layui-input" value="{{ data.server }}"></div>
+                <div class="layui-form-mid layui-word-aux">
+                    <span class="x-red">*</span>爬虫负责人
+                </div>
+            </div>
+
+
+            <div class="layui-form-item">
+                <label for="L_repass" class="layui-form-label"></label>
+                <button class="layui-btn" lay-filter="add" lay-submit="" type="submit">提交</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
