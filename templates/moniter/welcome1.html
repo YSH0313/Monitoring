@@ -141,15 +141,16 @@
                 <div class="layui-col-md12">
                     <div class="layui-card">
                         <div class="layui-card-body ">
-                            <form class="layui-form layui-col-space5">
+                            <form class="layui-form layui-col-space5" action="{% url 'edit_order_view' %}" method="post">
+                                {% csrf_token %}
                                 <div class="layui-input-inline layui-show-xs-block">
                                     <input class="layui-input" placeholder="开始日" name="start" id="start"></div>
                                 <div class="layui-input-inline layui-show-xs-block">
                                     <input class="layui-input" placeholder="截止日" name="end" id="end"></div>
                                 <div class="layui-input-inline layui-show-xs-block">
-                                    <input type="text" name="username" placeholder="请输入数据源名称" autocomplete="off" class="layui-input"></div>
+                                    <input type="text" name="source_name" placeholder="请输入数据源名称" autocomplete="off" class="layui-input"></div>
                                 <div class="layui-input-inline layui-show-xs-block">
-                                    <button class="layui-btn" lay-submit="" lay-filter="sreach">
+                                    <button class="layui-btn" lay-submit="" lay-filter="sreach" onclick="xadmin.open('查询',{% url 'show_result' %})">
                                         <i class="layui-icon">&#xe615;</i></button>
                                 </div>
                             </form>
@@ -161,7 +162,7 @@
                                 <i class="layui-icon"></i>添加</button></div>
                         <div class="layui-card-body ">
                             <div id="table"></div>
-                            <div id="pageBar"></div>
+                            <div id="pageBar" style="text-align: center"></div>
                     </div>
                 </div>
             </div>
@@ -170,136 +171,42 @@
 </div>
 
 
-<script LANGUAGE="javascript">
-    var json = [
-        {
-            id: '01',
-            source_name: '中国裁判文书网',
-            url: 'http://wenshu.court.gov.cn/Index',
-            dimensions: '裁判文书',
-            yesterday_num: '1000000',
-            today_num: '1100000',
-            owner: '袁少航',
-            last_select_time: '2017-08-17 18:22'
+<script language="javascript">
+    var json_demo = $.ajax({
+        async: false,
+        url: '/table_data',
+        type: 'GET',
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+            return data.data
         },
-        {
-            id: '02',
-            source_name: '中国裁判文书网',
-            url: 'http://wenshu.court.gov.cn/Index',
-            dimensions: '裁判文书',
-            yesterday_num: '1000000',
-            today_num: '1100000',
-            owner: '袁少航',
-            last_select_time: '2017-08-17 18:22'
-        },
-        {
-            id: '03',
-            source_name: '中国裁判文书网',
-            url: 'http://wenshu.court.gov.cn/Index',
-            dimensions: '裁判文书',
-            yesterday_num: '1000000',
-            today_num: '1100000',
-            owner: '袁少航',
-            last_select_time: '2017-08-17 18:22'
-        },
-        {
-            id: '04',
-            source_name: '中国裁判文书网',
-            url: 'http://wenshu.court.gov.cn/Index',
-            dimensions: '裁判文书',
-            yesterday_num: '1000000',
-            today_num: '1100000',
-            owner: '袁少航',
-            last_select_time: '2017-08-17 18:22'
-        },
-        {
-            id: '05',
-            source_name: '中国裁判文书网',
-            url: 'http://wenshu.court.gov.cn/Index',
-            dimensions: '裁判文书',
-            yesterday_num: '1000000',
-            today_num: '1100000',
-            owner: '袁少航',
-            last_select_time: '2017-08-17 18:22'
-        },
-        {
-            id: '06',
-            source_name: '中国裁判文书网',
-            url: 'http://wenshu.court.gov.cn/Index',
-            dimensions: '裁判文书',
-            yesterday_num: '1000000',
-            today_num: '1100000',
-            owner: '袁少航',
-            last_select_time: '2017-08-17 18:22'
-        },
-        {
-            id: '07',
-            source_name: '中国裁判文书网',
-            url: 'http://wenshu.court.gov.cn/Index',
-            dimensions: '裁判文书',
-            yesterday_num: '1000000',
-            today_num: '1100000',
-            owner: '袁少航',
-            last_select_time: '2017-08-17 18:22'
-        },
-        {
-            id: '08',
-            source_name: '中国裁判文书网',
-            url: 'http://wenshu.court.gov.cn/Index',
-            dimensions: '裁判文书',
-            yesterday_num: '1000000',
-            today_num: '1100000',
-            owner: '袁少航',
-            last_select_time: '2017-08-17 18:22'
-        },
-        {
-            id: '09',
-            source_name: '中国裁判文书网',
-            url: 'http://wenshu.court.gov.cn/Index',
-            dimensions: '裁判文书',
-            yesterday_num: '1000000',
-            today_num: '1100000',
-            owner: '袁少航',
-            last_select_time: '2017-08-17 18:22'
-        },
-        {
-            id: '10',
-            source_name: '中国裁判文书网',
-            url: 'http://wenshu.court.gov.cn/Index',
-            dimensions: '裁判文书',
-            yesterday_num: '1000000',
-            today_num: '1100000',
-            owner: '袁少航',
-            last_select_time: '2017-08-17 18:22'
-        },
-        {
-            id: '11',
-            source_name: '中国裁判文书网',
-            url: 'http://wenshu.court.gov.cn/Index',
-            dimensions: '裁判文书',
-            yesterday_num: '1000000',
-            today_num: '1100000',
-            owner: '袁少航',
-            last_select_time: '2017-08-17 18:22'
-        },
-    ];
+        erro: function (data) {
+            alert(data.resulf);
+        }
+    });
+    var response = JSON.parse(json_demo.responseText);
+    var json = response.data;
+    {#alert(JSON.stringify(json));#}
 
+    var url_demo = '{% url "editimport" 1 %}';
     for (var i=0;i<json.length;i++) {
-        json[i]['caozuo'] = "<a title=\"编辑\" onclick=\"xadmin.open('编辑','{% url 'editimport' %}',600,400)\" href=\"javascript:;\"><i class=\"layui-icon\">&#xe63c;</i></a><a title=\"删除\" onclick=\"datadel(this,'要删除的id')\" href=\"javascript:;\"><i class=\"layui-icon\">&#xe640;</i></a>";
+        var ids = json[i]['id'];
+        var urls = url_demo.replace(/1/, ids);
+        json[i]['caozuo'] = "<a title=\"编辑\" onclick=\"xadmin.open('编辑','"+urls+"',600,400)\" href=\"javascript:;\"><i class=\"layui-icon\">&#xe63c;</i></a><a title=\"删除\" onclick=\"datadel(this,"+ids+")\" href=\"javascript:;\"><i class=\"layui-icon\">&#xe640;</i></a>";
     }
-
     //nameList与widthList的数组长度要一致
-	var nameList = ['ID', '数据源名称', 'url', '维度', '昨日总量', '当前总量', '所属人', '最近查询时间', '操作']; //table的列名
-	var widthList = [10,10,10,10,10,10,10,10,10]; //table每列的宽度
+    var nameList = ['ID', '数据源名称', 'url', '维度', '昨日总量', '当前总量', '所属人', '最近查询时间', '操作']; //table的列名
+    var widthList = [10,10,10,10,10,10,10,10,10]; //table每列的宽度
     $(function () {
-		nicePage.setCfg({
-			table: 'table',
-			bar: 'pageBar',
-			limit: 7,
-			color: '#1E9FFF',
-			layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
-		});
-	}); //初始化完成
+        nicePage.setCfg({
+            table: 'table',
+            bar: 'pageBar',
+            limit: 7,
+            color: '#1E9FFF',
+            layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+        });
+    }); //初始化完成
 </script>
 
 <script language="JavaScript">
@@ -369,7 +276,8 @@
             layer.confirm('确认要删除吗？',
             function(index) {
                 //发异步删除数据
-                $(obj).parents(".tr").remove();
+                var ids = id;
+                window.location.href = location.href.replace('/first_welcome', '/del_order_view/'+ids);
                 layer.msg('已删除!', {
                     icon: 1,
                     time: 1000

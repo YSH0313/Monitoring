@@ -36,7 +36,7 @@
 <body>
 <div class="layui-fluid">
     <div class="layui-row">
-        <form class="layui-form" action="{% url 'edit_action' %}" method="post">
+        <form class="layui-form" action="{% url 'editimport' data.spider_id %}" method="post">
         {% csrf_token %}
             <input type="hidden" name="spider_id" value="{{ data.spider_id }}">
             <div class="layui-form-item">
@@ -44,8 +44,8 @@
                     <span class="x-red">*</span><nobr>数据源名称</nobr>
                 </label>
                 <div class="layui-input-inline">
-                    <input required="" lay-verify="email" autocomplete="off" name="interval_time"
-                           class="layui-input" value="{{ data.interval_time }}"></div>
+                    <input required="" lay-verify="email" autocomplete="off" name="source_name"
+                           class="layui-input" value="{{ data.source_name }}"></div>
                 <div class="layui-form-mid layui-word-aux">
                     <span class="x-red">*</span>官网名称
                 </div>
@@ -55,8 +55,8 @@
                     <span class="x-red">*</span><nobr>url</nobr>
                 </label>
                 <div class="layui-input-inline">
-                    <input type="text" id="L_username" name="data_base" required="" lay-verify="nikename"
-                           autocomplete="off" class="layui-input" value="{{ data.data_base }}"></div>
+                    <input type="text" id="L_username" name="url" required="" lay-verify="nikename"
+                           autocomplete="off" class="layui-input" value="{{ data.url }}"></div>
                 <div class="layui-form-mid layui-word-aux">
                     <span class="x-red">*</span>数据源所属url
                 </div>
@@ -67,8 +67,8 @@
                     <span class="x-red">*</span><nobr>所属人</nobr>
                 </label>
                 <div class="layui-input-inline">
-                    <input type="type" id="L_pass" name="server" required="" lay-verify="pass" autocomplete="off"
-                           class="layui-input" value="{{ data.server }}"></div>
+                    <input type="type" id="L_pass" name="owner" required="" lay-verify="pass" autocomplete="off"
+                           class="layui-input" value="{{ data.owner }}"></div>
                 <div class="layui-form-mid layui-word-aux">
                     <span class="x-red">*</span>爬虫负责人
                 </div>
@@ -77,10 +77,55 @@
 
             <div class="layui-form-item">
                 <label for="L_repass" class="layui-form-label"></label>
-                <button class="layui-btn" lay-filter="add" lay-submit="" type="submit">提交</button>
+{#                <button class="layui-btn" lay-filter="add" lay-submit="" type="submit">提交</button>#}
+                <button class="layui-btn" type="submit" onclick="xadmin.close()">提交</button>
             </div>
         </form>
     </div>
 </div>
 </body>
+<script>layui.use(['form', 'layer'],
+    function () {
+        $ = layui.jquery;
+        var form = layui.form,
+            layer = layui.layer;
+
+        //自定义验证规则
+        form.verify({
+            email: function (value) {
+                if (typeof (value) != "string") {
+                    return '参数错误';
+                }
+            },
+            nikename: function (value) {
+                if (value.length < 1) {
+                    return '至少得5个字符啊';
+                }
+            },
+            {#pass: [/(.+){6,12}$/, '密码必须6到12位'],#}
+            repass: function (value) {
+                {#if ($('#L_pass').val() != $('#L_repass').val()) {#}
+                if (value.length < 1) {
+                    return '两次密码不一致';}
+            }
+        });
+
+        //监听提交
+        form.on('submit(add)',
+            function (data) {
+                {#console.log(data);#}
+                //发异步，把数据提交给php
+                layer.alert("修改成功", {
+                        icon: 6
+                    },
+                    function () {
+                        // 获得frame索引
+                        var index = parent.layer.getFrameIndex(window.name);
+                        //关闭当前frame
+                        parent.layer.close(index);}
+                        );
+                return false;
+            });
+
+    });</script>
 </html>

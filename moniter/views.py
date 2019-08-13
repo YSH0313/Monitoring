@@ -5,11 +5,76 @@ from django.core.paginator import Paginator
 import datetime
 import hashlib
 import arrow
+import time
+import json
+import collections
 
 
 # Create your views here.
-def order_view(request):
-    return render(request, 'moniter/order-view.html')
+def order_view(request, spider_id):
+    if request.method == 'GET':
+        data = models.important_source.objects.filter(id=spider_id)[0]
+        content = {}
+        content['spider_id'] = data.id
+        content['source_name'] = data.source_name
+        content['url'] = data.url
+        content['owner'] = data.owner
+        return render(request, 'moniter/order-view.html', {'data': content})
+    elif request.method == 'POST':
+        spider_id = request.POST.get('spider_id')
+        source_name = request.POST.get('source_name')
+        url = request.POST.get('url')
+        owner = request.POST.get('owner')
+        data = models.important_source.objects.filter(pk=spider_id)[0]
+        data.source_name = source_name
+        data.url = url
+        data.owner = owner
+        data.save()
+        return render(request, 'moniter/welcome1.html')
+
+def del_order_view(request, spider_id):
+    models.important_source.objects.get(id=spider_id).delete()
+    return render(request, 'moniter/welcome1.html')
+
+def edit_order_view(request):
+    source_name = request.POST.get('source_name')
+    data_lists = []
+    data_normal = {}
+    data_all = models.important_source.objects.filter(source_name__icontains=source_name)
+    for i in data_all:
+        data_dic = collections.OrderedDict()  # 将普通字典转换为有序字典
+        data_dic['id'] = i.id
+        data_dic['source_name'] = i.source_name
+        data_dic['url'] = i.url
+        data_dic['dimensions'] = i.dimensions
+        data_dic['yesterday_num'] = i.yesterday_num
+        data_dic['today_num'] = i.today_num
+        data_dic['owner'] = i.owner
+        data_dic['last_select_time'] = str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+        data_lists.append(data_dic)
+    data_normal['data'] = json.dumps(data_lists)
+    return render(request, 'moniter/welcome2.html', {'data_normal': data_normal})
+
+def show_result(request):
+    return render(request, 'moniter/welcome2.html')
+
+def table_data(request):
+    data_lists = []
+    data_normal = {}
+    data_all = models.important_source.objects.all()
+    for i in data_all:
+        data_dic = collections.OrderedDict()  # 将普通字典转换为有序字典
+        data_dic['id'] = i.id
+        data_dic['source_name'] = i.source_name
+        data_dic['url'] = i.url
+        data_dic['dimensions'] = i.dimensions
+        data_dic['yesterday_num'] = i.yesterday_num
+        data_dic['today_num'] = i.today_num
+        data_dic['owner'] = i.owner
+        data_dic['last_select_time'] = str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+        data_lists.append(data_dic)
+    data_normal['data'] = data_lists
+    return JsonResponse(data_normal)
 
 def login(request):
     username_login = request.POST.get('username')
@@ -63,7 +128,6 @@ def welcome_first(request):
 
     if request.method == 'GET':
         new_num = {}
-
         one = models.data_count.objects.get(time_date=getYesterday(0), dimensions='裁判文书').count
         two = models.data_count.objects.get(time_date=getYesterday(1), dimensions='裁判文书').count
         three = models.data_count.objects.get(time_date=getYesterday(2), dimensions='裁判文书').count
@@ -138,6 +202,7 @@ def welcome_first(request):
             '裁判文书',
             '开庭公告',
         ]
+
         return render(request, 'moniter/welcome1.html', {'new_num': new_num, 'dimensions': dimensions, 'important_all': important_all})
 
     elif request.method == 'POST':

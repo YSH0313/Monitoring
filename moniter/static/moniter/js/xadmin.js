@@ -108,6 +108,7 @@
 	Xadmin.prototype.close = function() {
 		var index = parent.layer.getFrameIndex(window.name);
     	parent.layer.close(index);
+    	
 	};
   /**
    * [close 关闭弹出层父窗口关闭]
