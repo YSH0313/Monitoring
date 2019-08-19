@@ -90,9 +90,9 @@
                                 <td>{{ i.end_time }}</td>
                                 <td>{{ i.server }}</td>
                                 <td class="td-status">
-                                      {% if i.status == 0 %}
+                                      {% if i.status == '0' %}
                                           <span class="layui-btn layui-btn-normal layui-btn-mini layui-btn-disabled">已停用</span>
-                                      {% elif i.status != 0 %}
+                                      {% elif i.status != '0' %}
                                           <span class="layui-btn layui-btn-normal layui-btn-mini">已启用</span>
                                       {% endif %}
                                 </td>

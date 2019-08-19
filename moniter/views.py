@@ -195,13 +195,11 @@ def welcome_first(request):
 
 
         dimensions = {}
-        dimensions['dimensions'] = [
-            'dimensions1',
-            'dimensions2',
-            'dimensions3',
-            '裁判文书',
-            '开庭公告',
-        ]
+        all_dimensions = models.registered.objects.all()
+        dimensions_lists = []
+        for i in all_dimensions:
+            dimensions_lists.append(i.table_dimensions)
+        dimensions['dimensions'] = dimensions_lists
 
         return render(request, 'moniter/welcome1.html', {'new_num': new_num, 'dimensions': dimensions, 'important_all': important_all})
 
@@ -297,13 +295,12 @@ def welcome_first(request):
             new_num['seven_day'] = getYesterday(6)
 
             dimensions_map = {}
-            dimensions_map['dimensions'] = [
-                'dimensions1',
-                'dimensions2',
-                'dimensions3',
-                '裁判文书',
-                '开庭公告',
-            ]
+            all_dimensions = models.registered.objects.all()
+            dimensions_lists = []
+            for i in all_dimensions:
+                dimensions_lists.append(i.table_dimensions)
+            dimensions['dimensions'] = dimensions_lists
+
             info = {'staartdate': startdate, 'endate': enddate, 'dimensions_name': dimensions}
             return render(request, 'moniter/welcome1.html', {'new_num': new_num, 'dimensions': dimensions_map, 'info': info, 'important_all': important_all})
 
@@ -399,13 +396,12 @@ def welcome_first(request):
             new_num['seven_month'] = getMonth(0)
 
             dimensions_map = {}
-            dimensions_map['dimensions'] = [
-                'dimensions1',
-                'dimensions2',
-                'dimensions3',
-                '裁判文书',
-                '开庭公告',
-            ]
+            all_dimensions = models.registered.objects.all()
+            dimensions_lists = []
+            for i in all_dimensions:
+                dimensions_lists.append(i.table_dimensions)
+            dimensions['dimensions'] = dimensions_lists
+
             infos = {'startmonth': startdate, 'endmonth': enddate, 'dimensions_name': dimensions}
             return render(request, 'moniter/welcome1.html',
                           {'new_num': new_num, 'dimensions': dimensions_map, 'infos': infos, 'important_all': important_all})
@@ -465,15 +461,14 @@ def edit(request, spider_id):
     spider_data = models.spider_lists.objects.filter(pk=spider_id)[0]
     data['spider_id'] = spider_id
     data['servers'] = [
-        '机器1',
-        '机器2',
-        '机器3',
-        '机器4',
-        '机器5',
+        '106.75.18.196',
+        '106.75.123.173',
+        '106.50.40.174',
+        '106.75.100.246'
     ]
     data['interval_time'] = spider_data.interval_time
     data['data_base'] = spider_data.data_base
-    data['server'] = data['servers'][0]
+    data['server'] = spider_data.server
     return render(request, 'moniter/member-edit.html', {'data': data})
 
 

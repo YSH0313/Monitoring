@@ -77,10 +77,10 @@ WSGI_APPLICATION = 'Monitoring.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'django',  # 数据库名字
-        'USER': 'root',  # 账号
-        'PASSWORD': 'root',  # 密码
-        'HOST': '127.0.0.1',  # IP
+        'NAME': 'adjudicative',  # 数据库名字
+        'USER': 'lym',  # 账号
+        'PASSWORD': 'Elements123',  # 密码
+        'HOST': '117.50.3.204',  # IP
         'PORT': '3306',  # 端口
     }
 }
