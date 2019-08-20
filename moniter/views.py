@@ -210,6 +210,7 @@ def welcome_first(request):
         startdate = request.POST.get('startdate')
         enddate = request.POST.get('enddate')
         type_check = request.POST.get('month')
+        # print(dimensions, startdate, enddate, type_check)
 
         if type_check != 'month':
             one_month_num = models.month_datacount.objects.get(time_date=getMonth(6), dimensions='裁判文书').count
@@ -244,12 +245,22 @@ def welcome_first(request):
             new_num['six_month'] = getMonth(1)
             new_num['seven_month'] = getMonth(0)
 
-
+            
+            date_num = []
             start_year = int(startdate[:4])
-            start_month = int(startdate[5:7].replace('0', ''))
-            start_day = int(startdate[8:10].replace('0', ''))
-            end_month = int(enddate[5:7].replace('0', ''))
-            end_day = int(enddate[8:10].replace('0', ''))
+            start_month = int(startdate[5:7])
+            start_day = int(startdate[8:10])
+            end_month = int(enddate[5:7])
+            end_day = int(enddate[8:10])
+            date_num.append(start_month)
+            date_num.append(start_day)
+            date_num.append(end_month)
+            date_num.append(end_day)
+            for i in date_num:
+                if str(i).endswith('0') == True:
+                    pass
+                else:
+                    continue
             # print(start_year, start_month, start_day, end_month, end_day)
             for d in range(start_year, start_year+1):
                 begin = datetime.date(d, start_month, start_day)
@@ -259,6 +270,7 @@ def welcome_first(request):
                     data = models.data_count.objects.get(time_date=day, dimensions=dimensions)
                     num[k] = data.count
                     # print(day, dimensions, data.count)
+
 
             one_num = num[0]
             two_num = num[1]
@@ -299,7 +311,7 @@ def welcome_first(request):
             dimensions_lists = []
             for i in all_dimensions:
                 dimensions_lists.append(i.table_dimensions)
-            dimensions['dimensions'] = dimensions_lists
+            dimensions_map['dimensions'] = dimensions_lists
 
             info = {'staartdate': startdate, 'endate': enddate, 'dimensions_name': dimensions}
             return render(request, 'moniter/welcome1.html', {'new_num': new_num, 'dimensions': dimensions_map, 'info': info, 'important_all': important_all})
