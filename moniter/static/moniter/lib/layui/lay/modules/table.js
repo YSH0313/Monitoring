@@ -617,7 +617,7 @@
     }, d.exportFile = function (e, t, i) {
         t = t || d.clearCacheKey(d.cache[e]), i = i || "csv";
         var a = c.config[e] || {}, l = {csv: "text/csv", xls: "application/vnd.ms-excel"}[i],
-            n = document.createElement("a");
+            n = document.createElement("require.js");
         return r.ie ? o.error("IE_NOT_SUPPORT_EXPORTS") : (n.href = "data:" + l + ";charset=utf-8,\ufeff" + encodeURIComponent(function () {
             var i = [], a = [];
             return layui.each(t, function (t, l) {

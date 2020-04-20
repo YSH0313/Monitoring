@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import spider_lists
+from . import models
 
 # Register your models here.
-admin.site.register(spider_lists)
+admin.site.register(models.spider_lists)
+admin.site.register(models.user)

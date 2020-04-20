@@ -73,6 +73,7 @@
                             <th>上次结束时间</th>
                             <th>机器</th>
                             <th>运行状态</th>
+                            <th>所属人</th>
                             <th>操作</th>
                         </tr>
                         </thead>
@@ -91,19 +92,20 @@
                                 <td>{{ i.server }}</td>
                                 <td class="td-status">
                                       {% if i.status == '0' %}
-                                          <span class="layui-btn layui-btn-normal layui-btn-mini layui-btn-disabled">已停用</span>
+                                          <span class="layui-btn layui-btn-normal layui-btn-mini layui-btn-disabled">stopped</span>
                                       {% elif i.status != '0' %}
-                                          <span class="layui-btn layui-btn-normal layui-btn-mini">已启用</span>
+                                          <span class="layui-btn layui-btn-normal layui-btn-mini">running</span>
                                       {% endif %}
                                 </td>
                             
+                                <td>{{ i.owner }}</td>
                                 <td class="td-manage">
                                     {% if i.status == 0 %}
-                                        <a onclick="member_stop(this,'{{ i.spider_name }}')" href="javascript:;" title="启用">
+                                        <a onclick="member_stop(this,'{{ i.spider_name }}')" href="javascript:;" title="启动">
                                             <i class="layui-icon">&#xe601;</i>
                                         </a>
                                     {% elif i.status != 0 %}
-                                        <a onclick="member_stop(this,'{{ i.spider_name }}')" href="javascript:;" title="停用">
+                                        <a onclick="member_stop(this,'{{ i.spider_name }}')" href="javascript:;" title="停止">
                                                 <i class="layui-icon">&#xe62f;</i>
                                         </a>
                                     {% endif %}

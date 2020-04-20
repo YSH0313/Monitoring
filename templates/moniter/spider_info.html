@@ -1,0 +1,541 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>table模块快速使用</title>
+  <link rel="stylesheet" href="{% static 'moniter/css/layui.css' %}" media="all">
+  <link rel="stylesheet" href="{% static 'moniter/css/xadmin.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+   <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="{% static 'moniter/lib/layui/layui.js' %}" charset="utf-8"></script>
+  <script type="text/javascript" src="{% static 'moniter/js/xadmin.js' %}"></script>
+</head>
+<body>
+
+<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+  <ul class="layui-tab-title">
+    <li class="layui-this">概览</li>
+    <li>设置</li>
+    <li>起始配置</li>
+    <li>页码规则配置</li>
+    <li>列表规则配置</li>
+    <li>分析</li>
+    <li>定时任务</li>
+  </ul>
+  <div class="layui-tab-content" style="height: 100px;">
+    <div class="layui-tab-item layui-show">
+    <div style="width: 785px; float: left">
+    <table id="demo" lay-filter="test"></table>
+    </div>
+        <div style="float: left; width: 850px; margin-top: 10px">
+<form class="layui-form" action="" lay-filter="example">
+  <div class="layui-form-item">
+    <label class="layui-form-label">爬虫ID</label>
+    <div class="layui-input-block">
+      <input type="text" name="username" lay-verify="title" autocomplete="off" placeholder="{{ spider_id }}" class="layui-input" disabled style="background-color: #DCDEE0">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">爬虫名称</label>
+    <div class="layui-input-block">
+      <input type="text" name="spdiername" placeholder="请输入名称" autocomplete="off" class="layui-input" value="{{ spider_name }}">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">项目</label>
+    <div class="layui-input-block">
+      <select name="interest" lay-filter="aihao">
+        <option value=""></option>
+          {% for i in project_lists %}
+            <option value="{{ i.project_name }}">{{ i.project_name }}</option>
+          {% endfor %}
+      </select>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">代码目录</label>
+    <div class="layui-input-block">
+      <input type="text" name="mulu" autocomplete="off" class="layui-input" value="/{{ project_name }}/{{ project_name }}/spiders" disabled style="background-color: #DCDEE0">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">开关</label>
+    <div class="layui-input-block">
+      <input type="checkbox" name="close" lay-skin="switch" lay-text="ON|OFF">
+    </div>
+  </div>
+  <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">文本域</label>
+    <div class="layui-input-block">
+      <textarea placeholder="请输入内容" class="layui-textarea" name="desc"></textarea>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button type="button" class="layui-btn layui-btn-normal" id="LAY-component-form-setval" onclick="runner()">运行</button>
+      <button type="button" class="layui-btn layui-btn-normal" id="LAY-component-form-getval">上传</button>
+      <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">保存</button>
+    </div>
+  </div>
+</form>
+</div>
+    </div>
+    <div class="layui-tab-item">
+        <div class="layui-card-header" style="margin-left: 1400px">
+            <button type="button" class="layui-btn layui-btn-normal" onclick="xadmin.open('添加参数', '{% url 'add_param_html' project_name spider_name %}', 400, 330)">
+                <i class="layui-icon">&#xe608;</i> 添加</button>
+            <button type="button" class="layui-btn layui-btn-warm">
+                <i class="layui-icon">&#xe605;</i> 保存</button>
+        </div>
+        <table id="demo1" lay-filter="test1"></table>
+    </div>
+    <div class="layui-tab-item">
+        <div class="layui-card-header" style="margin-left: 1500px">
+            <button type="button" class="layui-btn layui-btn-normal" onclick="xadmin.open('添加基础配置', '{% url 'add_config_html' project_name spider_name %}', 800, 600)">
+                <i class="layui-icon">&#xe608;</i> 添加</button></div>
+        <table id="demo2" lay-filter="test2"></table></div>
+    <div class="layui-tab-item">
+        <div class="layui-card-header" style="margin-left: 1500px">
+            <button type="button" class="layui-btn layui-btn-normal" onclick="xadmin.open('添加页码规则', '{% url 'add_pagepath_html' project_name spider_name %}', 800, 600)">
+                <i class="layui-icon">&#xe608;</i> 添加</button></div>
+        <table id="demo3" lay-filter="test3"></table></div>
+    <div class="layui-tab-item">
+        <div class="layui-card-header" style="margin-left: 1500px">
+            <button type="button" class="layui-btn layui-btn-normal" onclick="xadmin.open('添加列表页规则', '{% url 'add_lists_html' project_name spider_name %}', 800, 600)">
+                <i class="layui-icon">&#xe608;</i> 添加</button></div>
+        <table id="demo4" lay-filter="test4"></table></div>
+    <div class="layui-tab-item">
+        <div class="layui-card-header" style="margin-left: 1400px">
+            <button type="button" class="layui-btn layui-btn-normal" onclick="xadmin.open('添加字段规则', '{% url 'add_filed_html' project_name spider_name %}', 800, 600)">
+                <i class="layui-icon">&#xe608;</i> 添加字段</button>
+            <button type="button" class="layui-btn layui-btn-warm" onclick="save()">
+                <i class="layui-icon">&#xe605;</i> 完成</button></div>
+        <table id="demo5" lay-filter="test5"></table></div>
+    <div class="layui-tab-item">内容6</div>
+  </div>
+</div>
+<script>
+    function save() {
+      var json_demo = $.ajax({
+          async: true,
+          url: '/down_add',
+          type: 'POST',
+          data: {'project_name': ('{{ project_name }}'), 'spider_name': ('{{ spider_name }}'), 'down': 'yes'},
+          dataType: "json",
+          contentType: "application/json; charset=utf-8",
+      success: function (d) {
+          return d.data},
+      beforeSend: function(xhr) {
+          xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+          var csrftoken = Cookies.get('csrftoken');
+          xhr.setRequestHeader("X-CSRFToken", csrftoken);},
+      erro: function (d) {
+          alert(d.resulf);}});
+      alert('保存完成')}
+</script>
+<script>
+    function runner() {
+        var json_demo = $.ajax({
+      async: true,
+      url: '/runner/{{ project_name }}/{{ spider_name }}',
+      type: 'GET',
+      dataType: "text",
+      contentType: "application/json; charset=utf-8",
+  success: function (d) {
+      return d.data
+  },
+  erro: function (d) {
+      alert(d.resulf);
+  }
+  });
+    }
+
+</script>
+
+<script type="text/html" id="barDemo">
+  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script type="text/html" id="barDemo1">
+  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+  <a class="layui-btn layui-btn-xs" lay-event="check">审核</a>
+</script>
+
+<script type="text/html" id="barDemo2">
+  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+  <a class="layui-btn layui-btn-xs" lay-event="check">审核</a>
+</script>
+
+<script type="text/html" id="barDemo3">
+  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+  <a class="layui-btn layui-btn-xs" lay-event="check">审核</a>
+</script>
+
+<script type="text/html" id="barDemo4">
+  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script>
+layui.use('element', function(){
+  var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
+
+  //监听导航点击
+  element.on('nav(demo)', function(elem){
+    //console.log(elem)
+    layer.msg(elem.text());
+  });
+});
+</script>
+<script>
+layui.use('table', function(){
+  var table = layui.table;
+
+  //第一个实例
+    table.render({
+        elem: '#demo'
+        ,height: 433
+        ,url: '/spider_info_data/'+('{{ spider_name }}') //数据接口
+        ,page: true //开启分页
+        ,cols: [[ //表头
+          {field: 'node', title: '节点', fixed: 'left'}
+          ,{field: 'spdiername', title: '爬虫'}
+          ,{field: 'param', title: '参数'}
+          ,{field: 'count', title: '结果数', sort: true}
+          ,{field: 'status', title: '状态'}
+          ,{field: 'creattime', title: '创建时间', sort: true}
+          {#,{field: 'score', title: '评分', width: 80, sort: true}#}
+          {#,{field: 'classify', title: '职业', width: 80}#}
+          {#,{field: 'wealth', title: '财富', width: 80, sort: true}#}
+        ]]
+      });
+    table.render({
+    elem: '#demo1'
+    ,height: 312
+    ,url: '/spider_setting/'+('{{ spider_name }}') //数据接口
+    ,page: false //开启分页
+    ,cols: [[ //表头
+      {field: 'id', title: 'ID', fixed: 'left', unresize:false, align:'center', hide:true}
+      ,{field: 'varname', title: '变量名', unresize:false, edit:true}
+      ,{field: 'vartype', title: '变量类型（备注）', unresize:false, edit:true}
+      ,{field: 'varvalue', title: '变量值', unresize:false, edit:true}
+      ,{field: 'operation', title: '操作', unresize:false, align:'center', toolbar:'#barDemo'}
+    ]]
+    });
+    table.render({
+    elem: '#demo2'
+    ,height: 312
+    ,url: '/start_json/'+('{{ spider_name }}') //数据接口
+    ,page: false //开启分页
+    ,cols: [[
+            {field: 'id', title:'ID', fixed: 'left', unresize: false, align: 'center'},
+            {field: 'startrequest', title:'起始URL', unresize: false, align: 'center', edit: true},
+            {field: 'headers', title:'请求头信息', unresize: false, align: 'center', edit: true},
+            {field: 'requesttype', title:'请求方式', unresize: false, align: 'center', edit: true},
+            {field: 'formdata', title:'请求表单信息', unresize: false, align: 'center', edit: true},
+            {field: 'operation', title:'操作', unresize: false, align: 'center', toolbar:'#barDemo1'},
+        ]]
+    });
+    table.render({
+    elem: '#demo3'
+    ,height: 312
+    ,url: '/page_data/'+('{{ spider_name }}') //数据接口
+    ,page: false //开启分页
+    ,cols: [[
+            {field: 'id', title:'ID', fixed: 'left', unresize: false, align: 'center'},
+            {field: 'pageurl', title:'页码链接', unresize: false, align: 'center', edit: true},
+            {field: 'pagecount', title:'总页数', unresize: false, align: 'center', edit: true},
+            {field: 'pagevar', title:'页码变量', unresize: false, align: 'center', edit: true},
+            {field: 'callname', title:'回调函数名', unresize: false, align: 'center', edit: true},
+            {field: 'operation', title:'操作', unresize: false, align: 'center', toolbar:'#barDemo2'},
+        ]]
+    });
+    table.render({
+elem: '#demo4'
+,height: 312
+,url: '/lists_data/'+('{{ spider_name }}') //数据接口
+,page: false //开启分页
+,cols: [[
+        {field: 'id', title:'ID', fixed: 'left', unresize: false, align: 'center'},
+        {field: 'listsxpath', title:'列表Xpath', unresize: false, align: 'center', edit: true},
+        {field: 'contentxpath', title:'详情页链接Xpath', unresize: false, align: 'center', edit: true},
+        {field: 'callname', title:'回调函数名', unresize: false, align: 'center', edit: true},
+        {field: 'operation', title:'操作', unresize: false, align: 'center', toolbar:'#barDemo3'},
+    ]]
+});
+    table.render({
+    elem: '#demo5'
+    ,height: 312
+    ,url: '/filed_data/'+('{{ spider_name }}') //数据接口
+    ,page: false //开启分页
+    ,cols: [[
+            {field: 'id', title:'ID', fixed: 'left', unresize: false, align: 'center'},
+            {field: 'fieldname', title:'字段名称', unresize: false, align: 'center', edit: true},
+            {field: 'rule', title:'匹配规则', unresize: false, align: 'center', edit: true},
+            {field: 'is_many', title:'是否匹配多个值', unresize: false, align: 'center', edit: true},
+            {field: 'notename', title:'备注名称', unresize: false, align: 'center', edit: true},
+            {field: 'operation', title:'操作', unresize: false, align: 'center', toolbar:'#barDemo4'},
+        ]]
+    });
+
+//监听工具条1
+table.on('tool(test1)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+  var data = obj.data; //获得当前行数据
+  var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+  var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+    console.log(data);
+    console.log(data.varname);
+    console.log('del_param/{{ spider_name }}/'+(data.varname));
+  if(layEvent === 'detail'){ //查看
+    //do somehing
+  } else if(layEvent === 'del'){ //删除
+    layer.confirm('真的删除行么', function(index){
+      obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+      var json_demo = $.ajax({
+          async: true,
+          url: '/del_param/{{ spider_name }}/'+(data.varname),
+          type: 'GET',
+          dataType: "text",
+          contentType: "application/json; charset=utf-8",
+      success: function (d) {
+          return d.data
+      },
+      erro: function (d) {
+          alert(d.resulf);
+      }
+      });
+      layer.close(index);
+      //向服务端发送删除指令
+    });
+  } else if(layEvent === 'edit'){ //编辑
+    //do something
+
+    //同步更新缓存对应的值
+    obj.update({
+      username: '123'
+      ,title: 'xxx'
+    });
+  } else if(layEvent === 'LAYTABLE_TIPS'){
+    layer.alert('Hi，头部工具栏扩展的右侧图标。');
+  }
+});
+table.on('edit(test1)', function(obj){ //注：edit是固定事件名，test是table原始容器的属性 lay-filter="对应的值"
+  {#console.log(obj.value); //得到修改后的值#}
+  {#console.log(obj.field); //当前编辑的字段名#}
+  {#console.log(obj.data); //所在行的所有相关数据#}
+  var data = obj.data;
+  var json_demo = $.ajax({
+      async: true,
+      url: '/edit_param/{{ project_name }}/{{ spider_name }}/'+(data.id)+'/'+(data.varname)+'/'+(data.vartype)+'/'+(data.varvalue),
+      type: 'GET',
+      dataType: "text",
+      contentType: "application/json; charset=utf-8",
+  success: function (d) {
+      return d.data
+  },
+  erro: function (d) {
+      alert(d.resulf);
+  }
+  });
+});
+
+//监听工具条2
+table.on('tool(test2)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+  var data = obj.data; //获得当前行数据
+  var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+  var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+  if(layEvent === 'detail'){ //查看
+    //do somehing
+  } else if(layEvent === 'del'){ //删除
+    layer.confirm('真的删除行么', function(index){
+      obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+      var json_demo = $.ajax({
+          async: true,
+          url: '/del_start/{{ spider_name }}/'+(data.id),
+          type: 'GET',
+          dataType: "text",
+          contentType: "application/json; charset=utf-8",
+        success: function (d) {
+          return d.data
+        },
+        erro: function (d) {
+          alert(d.resulf);
+        }
+        });
+      layer.close(index);
+      //向服务端发送删除指令
+    });
+  } else if(layEvent === 'edit'){ //编辑
+    //do something
+
+    //同步更新缓存对应的值
+    obj.update({
+      username: '123'
+      ,title: 'xxx'
+    });
+  } else if(layEvent === 'LAYTABLE_TIPS'){
+    layer.alert('Hi，头部工具栏扩展的右侧图标。');
+  }
+});
+table.on('edit(test2)', function(obj){ //注：edit是固定事件名，test是table原始容器的属性 lay-filter="对应的值"
+  var data = obj.data;
+  console.log(data.id);
+  console.log(data.startrequest);
+  console.log(data.headers);
+  console.log(data.requesttype);
+  console.log(data.formdata);
+  var json_demo = $.ajax({
+      async: true,
+      url: '/edit_config',
+      type: 'POST',
+      data: {'project_name': ('{{ project_name }}'), 'spider_name': ('{{ spider_name }}'), 'spider_id': data.id, 'startrequest': data.startrequest, 'headers': data.headers, 'requesttype': data.requesttype, 'formdata': data.formdata},
+      dataType: "json",
+      contentType: "application/json; charset=utf-8",
+  success: function (d) {
+      return d.data},
+  beforeSend: function(xhr) {
+      xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+      var csrftoken = Cookies.get('csrftoken');
+      xhr.setRequestHeader("X-CSRFToken", csrftoken);},
+  erro: function (d) {
+      alert(d.resulf);}});
+});
+
+//监听工具条3
+table.on('tool(test3)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+  var data = obj.data; //获得当前行数据
+  var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+  var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+
+  if(layEvent === 'detail'){ //查看
+    //do somehing
+  } else if(layEvent === 'del'){ //删除
+    layer.confirm('真的删除行么', function(index){
+      obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+      var json_demo = $.ajax({
+          async: true,
+          url: '/del_pageset/{{ spider_name }}/'+(data.id),
+          type: 'GET',
+          dataType: "text",
+          contentType: "application/json; charset=utf-8",
+        success: function (d) {
+          return d.data
+        },
+        erro: function (d) {
+          alert(d.resulf);
+        }
+        });
+      layer.close(index);
+      //向服务端发送删除指令
+    });
+  } else if(layEvent === 'edit'){ //编辑
+    //do something
+
+    //同步更新缓存对应的值
+    obj.update({
+      username: '123'
+      ,title: 'xxx'
+    });
+  } else if(layEvent === 'LAYTABLE_TIPS'){
+    layer.alert('Hi，头部工具栏扩展的右侧图标。');
+  }
+});
+table.on('edit(test3)', function(obj){ //注：edit是固定事件名，test是table原始容器的属性 lay-filter="对应的值"
+  console.log(obj.value); //得到修改后的值
+  console.log(obj.field); //当前编辑的字段名
+  console.log(obj.data); //所在行的所有相关数据
+});
+
+//监听工具条4
+table.on('tool(test4)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+  var data = obj.data; //获得当前行数据
+  var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+  var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+
+  if(layEvent === 'detail'){ //查看
+    //do somehing
+  } else if(layEvent === 'del'){ //删除
+    layer.confirm('真的删除行么', function(index){
+      obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+      var json_demo = $.ajax({
+          async: true,
+          url: '/del_listsset/{{ spider_name }}/'+(data.id),
+          type: 'GET',
+          dataType: "text",
+          contentType: "application/json; charset=utf-8",
+        success: function (d) {
+          return d.data
+        },
+        erro: function (d) {
+          alert(d.resulf);
+        }
+        });
+      layer.close(index);
+      //向服务端发送删除指令
+    });
+  } else if(layEvent === 'edit'){ //编辑
+    //do something
+
+    //同步更新缓存对应的值
+    obj.update({
+      username: '123'
+      ,title: 'xxx'
+    });
+  } else if(layEvent === 'LAYTABLE_TIPS'){
+    layer.alert('Hi，头部工具栏扩展的右侧图标。');
+  }
+});
+table.on('edit(test4)', function(obj){ //注：edit是固定事件名，test是table原始容器的属性 lay-filter="对应的值"
+  console.log(obj.value); //得到修改后的值
+  console.log(obj.field); //当前编辑的字段名
+  console.log(obj.data); //所在行的所有相关数据
+});
+
+//监听工具条5
+table.on('tool(test5)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+  var data = obj.data; //获得当前行数据
+  var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+  var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+
+  if(layEvent === 'detail'){ //查看
+    //do somehing
+  } else if(layEvent === 'del'){ //删除
+    layer.confirm('真的删除行么', function(index){
+      obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+      {#var json_demo = $.ajax({#}
+      {#    async: true,#}
+      {#    url: '/del_listsset/{{ spider_name }}/'+(data.id),#}
+      {#    type: 'GET',#}
+      {#    dataType: "text",#}
+      {#    contentType: "application/json; charset=utf-8",#}
+      {#  success: function (d) {#}
+      {#    return d.data#}
+      {#  },#}
+      {#  erro: function (d) {#}
+      {#    alert(d.resulf);#}
+      {#  }#}
+      {#  });#}
+      layer.close(index);
+      //向服务端发送删除指令
+    });
+  } else if(layEvent === 'edit'){ //编辑
+    //do something
+
+    //同步更新缓存对应的值
+    obj.update({
+      username: '123'
+      ,title: 'xxx'
+    });
+  } else if(layEvent === 'LAYTABLE_TIPS'){
+    layer.alert('Hi，头部工具栏扩展的右侧图标。');
+  }
+});
+table.on('edit(test5)', function(obj){ //注：edit是固定事件名，test是table原始容器的属性 lay-filter="对应的值"
+  console.log(obj.value); //得到修改后的值
+  console.log(obj.field); //当前编辑的字段名
+  console.log(obj.data); //所在行的所有相关数据
+});
+});
+</script>
+</body>
+</html>

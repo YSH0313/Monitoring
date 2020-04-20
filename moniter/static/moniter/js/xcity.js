@@ -54,14 +54,14 @@
     }
 
     this.showA = function (areaList) {
-        this.a.html('');
+        this.require.html('');
 
         for (var i in areaList) {
             
             if(aName==areaList[i]){
-                this.a.append("<option selected value='"+areaList[i]+"'>"+areaList[i]+"</option>")
+                this.require.append("<option selected value='"+areaList[i]+"'>"+areaList[i]+"</option>")
             }else{
-                this.a.append("<option value='"+areaList[i]+"'>"+areaList[i]+"</option>")
+                this.require.append("<option value='"+areaList[i]+"'>"+areaList[i]+"</option>")
             }
         }
     }

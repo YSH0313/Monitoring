@@ -1,0 +1,123 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="{% static 'moniter/css/font.css' %}">
+  <link rel="stylesheet" href="{% static 'moniter/css/layui.css' %}" media="all">
+  <link rel="stylesheet" href="{% static 'moniter/css/xadmin.css' %}">
+  <script src="{% static 'moniter/lib/layui/layui.js' %}" charset="utf-8"></script>
+  <script type="text/javascript" src="{% static 'moniter/js/xadmin.js' %}"></script>
+</head>
+
+<body style="background-color: #F7F7F7">
+<form class="layui-form layui-form-pane" action="{% url 'add_param' %}" method="post">
+    {% csrf_token %}
+      <input type="hidden" name="projectname" value="{{ project_name }}" autocomplete="off" placeholder="请输入项目名称" class="layui-input">
+      <input type="hidden" name="spidername" value="{{ spider_name }}" lay-verify="required" placeholder="请输入爬虫名称" autocomplete="off" class="layui-input">
+  <div class="layui-form-item">
+      <label class="layui-form-label">变量名</label>
+    <div class="layui-input-inline">
+      <input type="text" name="varname" placeholder="请输入变量名" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">变量类型</label>
+    <div class="layui-input-inline">
+      <select name="vartype" lay-filter="aihao">
+        <option value=""></option>
+        <option value="数字整形">数字整形</option>
+        <option value="布尔类型">布尔类型</option>
+        <option value="字符串类型">字符串类型</option>
+        <option value="浮点类型">浮点类型</option>
+        <option value="列表类型">列表类型</option>
+        <option value="元组类型">元组类型</option>
+      </select>
+    </div>
+  </div>
+  <div class="layui-form-item">
+      <label class="layui-form-label">变量值</label>
+    <div class="layui-input-inline">
+      <input type="text" name="varvalue" placeholder="请输入变量值" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo2" onclick="xadmin.close()">确认添加</button>
+  </div>
+</form>
+</body>
+
+<script>
+    layui.use(['form', 'layedit', 'laydate'], function(){
+  var form = layui.form
+  ,layer = layui.layer
+  ,layedit = layui.layedit
+  ,laydate = layui.laydate;
+
+  //日期
+  laydate.render({
+    elem: '#date'
+  });
+  laydate.render({
+    elem: '#date1'
+  });
+
+  //创建一个编辑器
+  var editIndex = layedit.build('LAY_demo_editor');
+
+  //自定义验证规则
+  form.verify({
+    title: function(value){
+      if(value.length < 5){
+        return '标题至少得5个字符啊';
+      }
+    }
+    ,pass: [
+      /^[\S]{6,12}$/
+      ,'密码必须6到12位，且不能出现空格'
+    ]
+    ,content: function(value){
+      layedit.sync(editIndex);
+    }
+  });
+
+  //监听指定开关
+  form.on('switch(switchTest)', function(data){
+    layer.msg('开关checked：'+ (this.checked ? 'true' : 'false'), {
+      offset: '6px'
+    });
+    layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
+  });
+
+  //监听提交
+  form.on('submit(demo1)', function(data){
+    layer.alert(JSON.stringify(data.field), {
+      title: '最终的提交信息'
+    })
+    return false;
+  });
+
+  //表单赋值
+  layui.$('#LAY-component-form-setval').on('click', function(){
+    form.val('example', {
+      "username": "贤心" // "name": "value"
+      ,"password": "123456"
+      ,"interest": 1
+      ,"like[write]": true //复选框选中状态
+      ,"close": true //开关状态
+      ,"sex": "女"
+      ,"desc": "我爱 layui"
+    });
+  });
+
+  //表单取值
+  layui.$('#LAY-component-form-getval').on('click', function(){
+    var data = form.val('example');
+    alert(JSON.stringify(data));
+  });
+
+});
+</script>
+</html>

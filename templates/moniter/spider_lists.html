@@ -1,0 +1,68 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>spider列表</title>
+
+    <link rel="stylesheet" href="{% static 'moniter/css/font.css' %}">
+  <link rel="stylesheet" href="{% static 'moniter/css/layui.css' %}" media="all">
+  <link rel="stylesheet" href="{% static 'moniter/css/xadmin.css' %}">
+  <script src="{% static 'moniter/lib/layui/layui.js' %}" charset="utf-8"></script>
+  <script type="text/javascript" src="{% static 'moniter/js/xadmin.js' %}"></script>
+    <style>	[contype=string]{
+        position: absolute;
+    }
+    [allowtransparency=true]{
+        width: -webkit-fill-available;
+    }
+        .layui-layer-title{background-color: white}
+    </style>
+</head>
+<body>
+    <div style="margin-left: 20px; margin-top: 20px">
+        <form class="layui-form" method="post" onsubmit="return false">
+        {% csrf_token %}
+        <div class="layui-input-inline layui-show-xs-block">
+            <input type="text" name="projectname" placeholder="请输入爬虫名称" autocomplete="off" class="layui-input">
+        </div>
+        <div class="layui-input-inline layui-show-xs-block">
+            <button class="layui-btn" lay-submit="" lay-filter="sreach">
+                <i class="layui-icon">&#xe615;</i></button>
+        </div>
+            <div class="layui-input-inline layui-show-xs-block"  class="site-demo-button" id="layerDemo" style="margin-bottom: 0;">
+                <button class="layui-btn" onclick="xadmin.open('&nbsp;&nbsp;添加爬虫','{% url 'spider_add' project_name %}',800,600)">
+                  <i class="layui-icon">&#xe608;</i> 添加爬虫
+                </button>
+            </div>
+        </form>
+    </div>
+    <table id="demo" lay-filter="test" style="text-align: center"></table>
+<script src="{% static 'moniter/js/layui.js' %}"></script>
+<script>
+layui.use('table', function(){
+  var table = layui.table;
+
+  //第一个实例
+  table.render({
+    elem: '#demo'
+    {#, height: 1000#}
+    ,url: '/spiders_json/'+({{ project_id }}) //数据接口
+    ,page: false //开启分页
+    ,toolbar: true
+    ,cols: [[ //表头
+      {field: 'id', title: 'ID', sort: true, fixed: 'left', align: 'center'}
+      ,{field: 'spidername', title: '爬虫名称', align: 'center'}
+      ,{field: 'islong', title: '是否为长任务', sort: true, align: 'center'}
+      ,{field: 'nextstatus', title: '上次运行状态', align: 'center'}
+      ,{field: 'lasttime', title: '上次运行时间', align: 'center'}
+      ,{field: 'creattime', title: '创建时间', sort: true, align: 'center'}
+      ,{field: 'remarks', title: '备注', sort: true, align: 'center'}
+      ,{field: 'operation', title: '操作', align: 'center'}
+    ]]
+  });
+
+});
+</script>
+</body>
+</html>

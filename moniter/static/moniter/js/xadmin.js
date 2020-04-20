@@ -14,7 +14,6 @@
 		element.tabChange('xbs_tab', i);
 	};
   /**
-   * [end 执行结束要做的]
    * @return {[type]} [description]
    */
   Xadmin.prototype.end = function() {
@@ -44,8 +43,11 @@
 		this.add_lay_tab(title,url,id);
 	    this.set_data(title,url,id);
 	    element.tabChange('xbs_tab', id);
-
 	}
+
+    function replaceDoc(){
+        location.reload();
+    }
 
   Xadmin.prototype.del_tab = function (id) {
 
@@ -97,7 +99,7 @@
 	        content: url
 	    });
 	    if(full){
-	       layer.full(index); 
+	       layer.full(index);
 	    }
 	    
 	}
@@ -108,6 +110,7 @@
 	Xadmin.prototype.close = function() {
 		var index = parent.layer.getFrameIndex(window.name);
     	parent.layer.close(index);
+    	// window.location.href = location.href.replace(window.location.pathname, '/index');
     	
 	};
   /**

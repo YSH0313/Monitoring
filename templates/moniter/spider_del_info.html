@@ -1,0 +1,37 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="{% static 'moniter/css/font.css' %}">
+    <script type="text/javascript" src="{% static 'moniter/js/xadmin.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'moniter/css/layui.css' %}" media="all">
+    <script src="{% static 'moniter/lib/layui/layui.js' %}" charset="utf-8"></script>
+</head>
+
+<body style="background-color: #F7F7F7">
+<div class="layui-layer layui-layer-dialog" type="dialog" contype="string"
+     style="z-index: 19891016; top: 151.5px; left: 720px;">
+    <div id="" class="layui-layer-content" style="margin-top: 20px">确认要删除吗？</div>
+    <span class="layui-layer-setwin"><a class="layui-layer-ico layui-layer-close layui-layer-close1" href="javascript:;"></a></span>
+
+    <form class="layui-form" action="{% url 'spider_del' %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" id="spider_id" name="spider_id" value="{{ spider_id }}" required="" lay-verify="required" autocomplete="off" class="layui-input">
+    <div class="layui-btn-container" style="margin-top: 50px; margin-left: 55px">
+      <button type="submit" class="layui-btn layui-btn-danger" onclick="xadmin.close(); replaceDoc()">确认</button>
+      <button type="button" class="layui-btn" onclick="xadmin.close()">取消</button>
+    </div>
+    </form>
+    <span class="layui-layer-resize"></span></div>
+</body>
+
+    <script>
+    function replaceDoc(){
+    	window.location.href = location.href.replace(window.location.pathname, '/index');
+    	parent.location.reload();
+    }
+    </script>
+</html>

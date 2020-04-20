@@ -3,7 +3,7 @@
 <html class="x-admin-sm">
     <head>
         <meta charset="UTF-8">
-        <title>后台登录-X-admin2.2</title>
+        <title>Less Sailing-1.0</title>
         <meta name="renderer" content="webkit|ie-comp|ie-stand">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
@@ -28,7 +28,7 @@
         <!-- 顶部开始 -->
         <div class="container">
             <div class="logo">
-                <a href="./index.html">X-admin v2.2</a></div>
+                <a href="./index.html">Less Sailing-1.0</a></div>
             <div class="left_open">
                 <a><i title="展开左侧栏" class="iconfont">&#xe699;</i></a>
             </div>
@@ -38,19 +38,19 @@
                     <dl class="layui-nav-child">
                         <!-- 二级菜单 -->
                         <dd>
-                            <a onclick="xadmin.open('最大化','http://www.baidu.com','','',true)">
+                            <a onclick="xadmin.open('最大化','https://www.baidu.com','','',true)">
                                 <i class="iconfont">&#xe6a2;</i>弹出最大化</a></dd>
                         <dd>
-                            <a onclick="xadmin.open('弹出自动宽高','http://www.baidu.com')">
+                            <a onclick="xadmin.open('弹出自动宽高','https://www.baidu.com')">
                                 <i class="iconfont">&#xe6a8;</i>弹出自动宽高</a></dd>
                         <dd>
-                            <a onclick="xadmin.open('弹出指定宽高','http://www.baidu.com',500,300)">
+                            <a onclick="xadmin.open('弹出指定宽高','',500,300)">
                                 <i class="iconfont">&#xe6a8;</i>弹出指定宽高</a></dd>
                         <dd>
-                            <a onclick="xadmin.add_tab('在tab打开','member-list.html')">
+                            <a onclick="xadmin.add_tab('在tab打开','https://www.baidu.com')">
                                 <i class="iconfont">&#xe6b8;</i>在tab打开</a></dd>
                         <dd>
-                            <a onclick="xadmin.add_tab('在tab打开刷新','member-del.html',true)">
+                            <a onclick="xadmin.add_tab('在tab打开刷新','https://www.baidu.com',true)">
                                 <i class="iconfont">&#xe6b8;</i>在tab打开刷新</a></dd>
                     </dl>
                 </li>
@@ -65,7 +65,7 @@
                         <dd>
                             <a href="{% url 'login' %}">切换帐号</a></dd>
                         <dd>
-                            <a href="/">退出</a></dd>
+                            <a href="{% url 'logout_user'%}">退出</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item to-index">
@@ -80,8 +80,8 @@
                 <ul id="nav">
                     <li>
                         <a href="javascript:;">
-                            <i class="iconfont left-nav-li" lay-tips="爬虫管理">&#xe6b8;</i>
-                            <cite>爬虫管理</cite>
+                            <i class="iconfont left-nav-li" lay-tips="爬虫监控">&#xe6b8;</i>
+                            <cite>爬虫监控</cite>
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
                             <li>
@@ -126,19 +126,25 @@
                     </li>
                     <li>
                         <a href="javascript:;">
-                            <i class="iconfont left-nav-li" lay-tips="订单管理">&#xe723;</i>
-                            <cite>订单管理</cite>
+                            <i class="iconfont left-nav-li" lay-tips="采集系统">&#xe723;</i>
+                            <cite>采集系统</cite>
                             <i class="iconfont nav_right">&#xe697;</i></a>
                         <ul class="sub-menu">
                             <li>
-                                <a onclick="xadmin.add_tab('订单列表','order-list.html')">
+                                <a onclick="xadmin.add_tab('项目管理','{% url 'order' %}')">
                                     <i class="iconfont">&#xe6a7;</i>
-                                    <cite>订单列表</cite></a>
+                                    <cite>项目管理</cite></a>
                             </li>
                             <li>
-                                <a onclick="xadmin.add_tab('订单列表1','order-list1.html')">
+                                <a onclick="xadmin.add_tab('爬虫管理','{% url 'first_order' 999999999999 %}')">
+{#                                <a onclick="xadmin.add_tab('爬虫管理','{% url 'ceshi' %}')">#}
                                     <i class="iconfont">&#xe6a7;</i>
-                                    <cite>订单列表1</cite></a>
+                                    <cite>爬虫管理</cite></a>
+                            </li>
+                            <li>
+                                <a onclick="xadmin.add_tab('爬虫配置','https://www.baidu.com')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>爬虫配置</cite></a>
                             </li>
                         </ul>
                     </li>

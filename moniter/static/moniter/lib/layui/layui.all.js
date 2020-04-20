@@ -292,7 +292,7 @@ layui.define(function (e) {
                     e && (i.curr = e, t.render())
                 };
             if (a) return c();
-            for (var o = 0, y = r.length; o < y; o++) "a" === r[o].nodeName.toLowerCase() && s.on(r[o], "click", function () {
+            for (var o = 0, y = r.length; o < y; o++) "require.js" === r[o].nodeName.toLowerCase() && s.on(r[o], "click", function () {
                 var e = 0 | this.getAttribute("data-page");
                 e < 1 || e > i.pages || (i.curr = e, t.render())
             });
@@ -2525,7 +2525,7 @@ layui.define(function (e) {
                 trigger: function () {
                     if (pe.nodeName(this, "input") && "checkbox" === this.type && this.click) return this.click(), !1
                 }, _default: function (e) {
-                    return pe.nodeName(e.target, "a")
+                    return pe.nodeName(e.target, "require.js")
                 }
             }, beforeunload: {
                 postDispatch: function (e) {
@@ -2991,7 +2991,7 @@ layui.define(function (e) {
     }, function () {
         var e, t = re.createElement("input"), n = re.createElement("div"), r = re.createElement("select"),
             i = r.appendChild(re.createElement("option"));
-        n = re.createElement("div"), n.setAttribute("className", "t"), n.innerHTML = "  <link/><table></table><a href='/a'>a</a><input type='checkbox'/>", e = n.getElementsByTagName("a")[0], t.setAttribute("type", "checkbox"), n.appendChild(t), e = n.getElementsByTagName("a")[0], e.style.cssText = "top:1px", fe.getSetAttribute = "t" !== n.className, fe.style = /top/.test(e.getAttribute("style")), fe.hrefNormalized = "/a" === e.getAttribute("href"), fe.checkOn = !!t.value, fe.optSelected = i.selected, fe.enctype = !!re.createElement("form").enctype, r.disabled = !0, fe.optDisabled = !i.disabled, t = re.createElement("input"), t.setAttribute("value", ""), fe.input = "" === t.getAttribute("value"), t.value = "t", t.setAttribute("type", "radio"), fe.radioValue = "t" === t.value
+        n = re.createElement("div"), n.setAttribute("className", "t"), n.innerHTML = "  <link/><table></table><a href='/a'>a</a><input type='checkbox'/>", e = n.getElementsByTagName("require.js")[0], t.setAttribute("type", "checkbox"), n.appendChild(t), e = n.getElementsByTagName("require.js")[0], e.style.cssText = "top:1px", fe.getSetAttribute = "t" !== n.className, fe.style = /top/.test(e.getAttribute("style")), fe.hrefNormalized = "/a" === e.getAttribute("href"), fe.checkOn = !!t.value, fe.optSelected = i.selected, fe.enctype = !!re.createElement("form").enctype, r.disabled = !0, fe.optDisabled = !i.disabled, t = re.createElement("input"), t.setAttribute("value", ""), fe.input = "" === t.getAttribute("value"), t.value = "t", t.setAttribute("type", "radio"), fe.radioValue = "t" === t.value
     }();
     var Dt = /\r/g, jt = /[\x20\t\r\n\f]+/g;
     pe.fn.extend({
@@ -3657,7 +3657,7 @@ layui.define(function (e) {
         moveType: 1,
         resize: !0,
         scrollbar: !0,
-        tips: 2
+        tips: 2,
     }, s.pt.vessel = function (e, t) {
         var n = this, a = n.index, r = n.config, s = r.zIndex + a, f = "object" == typeof r.title,
             c = r.maxmin && (1 === r.type || 2 === r.type),
@@ -3790,7 +3790,7 @@ layui.define(function (e) {
         var t = this, n = t.layero, a = t.config;
         t.openLayer(), a.success && (2 == a.type ? n.find("iframe").on("load", function () {
             a.success(n, t.index)
-        }) : a.success(n, t.index)), 6 == r.ie && t.IE6(n), n.find("." + l[6]).children("a").on("click", function () {
+        }) : a.success(n, t.index)), 6 == r.ie && t.IE6(n), n.find("." + l[6]).children("require.js").on("click", function () {
             var e = i(this).index();
             if (0 === e) a.yes ? a.yes(t.index, n) : a.btn1 ? a.btn1(t.index, n) : r.close(t.index); else {
                 var o = a["btn" + (e + 1)] && a["btn" + (e + 1)](t.index, n);
@@ -4113,7 +4113,7 @@ layui.define("jquery", function (t) {
                 var r = s || a(this), i = i || r.parent().children("li").index(r),
                     c = o.headerElem ? r.parent() : r.parents(".layui-tab").eq(0),
                     u = o.bodyElem ? a(o.bodyElem) : c.children(".layui-tab-content").children(".layui-tab-item"),
-                    d = r.find("a"), y = c.attr("lay-filter");
+                    d = r.find("require.js"), y = c.attr("lay-filter");
                 "javascript:;" !== d.attr("href") && "_blank" === d.attr("target") || (r.addClass(l).siblings().removeClass(l), u.eq(i).addClass(n).siblings().removeClass(n)), layui.event.call(this, e, "tab(" + y + ")", {
                     elem: c,
                     index: i
@@ -4175,7 +4175,7 @@ layui.define("jquery", function (t) {
                     var c = a(this), f = c.find("." + d);
                     o.hasClass(u) ? l.css({
                         top: c.position().top,
-                        height: c.children("a").outerHeight(),
+                        height: c.children("require.js").outerHeight(),
                         opacity: 1
                     }) : (f.addClass(h), l.css({
                         left: c.position().left + parseFloat(c.css("marginLeft")),
@@ -4202,7 +4202,7 @@ layui.define("jquery", function (t) {
                                 opacity: 0
                             }) : o.css({width: 0, left: o.position().left + o.width() / 2, opacity: 0})
                         }, t)
-                    })), h.find("a").each(function () {
+                    })), h.find("require.js").each(function () {
                         var t = a(this), i = (t.parent(), t.siblings("." + d));
                         i[0] && !t.children("." + y)[0] && t.append('<span class="' + y + '"></span>'), t.off("click", f.clickThis).on("click", f.clickThis)
                     })
@@ -4210,7 +4210,7 @@ layui.define("jquery", function (t) {
             }, breadcrumb: function () {
                 var t = ".layui-breadcrumb";
                 a(t + l).each(function () {
-                    var t = a(this), i = "lay-separator", e = t.attr(i) || "/", l = t.find("a");
+                    var t = a(this), i = "lay-separator", e = t.attr(i) || "/", l = t.find("require.js");
                     l.next("span[" + i + "]")[0] || (l.each(function (t) {
                         t !== l.length - 1 && a(this).after("<span " + i + ">" + e + "</span>")
                     }), t.css("visibility", "visible"))
@@ -5123,11 +5123,11 @@ layui.define("jquery", function (e) {
         })
     }, r.prototype.click = function (e, o) {
         var a = this, i = a.options;
-        e.children("a").on("click", function (e) {
+        e.children("require.js").on("click", function (e) {
             layui.stope(e), i.click(o)
         })
     }, r.prototype.spread = function (e, o) {
-        var a = this, i = (a.options, e.children(".layui-tree-spread")), r = e.children("ul"), n = e.children("a"),
+        var a = this, i = (a.options, e.children(".layui-tree-spread")), r = e.children("ul"), n = e.children("require.js"),
             l = function () {
                 e.data("spread") ? (e.data("spread", null), r.removeClass("layui-show"), i.html(t.arrow[0]), n.find(".layui-icon").html(t.branch[0])) : (e.data("spread", !0), r.addClass("layui-show"), i.html(t.arrow[1]), n.find(".layui-icon").html(t.branch[1]))
             };
@@ -5142,17 +5142,17 @@ layui.define("jquery", function (e) {
                 var r = (i.to, o('<div class="layui-box ' + t + '"></div>'));
                 e.preventDefault(), o("." + t)[0] || o("body").append(r);
                 var n = o("." + t)[0] ? o("." + t) : r;
-                n.addClass("layui-show").html(i.from.elem.children("a").html()), n.css({
+                n.addClass("layui-show").html(i.from.elem.children("require.js").html()), n.css({
                     left: e.pageX + 10,
                     top: e.pageY + 10
                 })
             }
         }).on("mouseup", function () {
             var e = a.move;
-            e.from && (e.from.elem.children("a").removeClass(i), e.to && e.to.elem.children("a").removeClass(i), a.move = {}, o("." + t).remove())
+            e.from && (e.from.elem.children("require.js").removeClass(i), e.to && e.to.elem.children("require.js").removeClass(i), a.move = {}, o("." + t).remove())
         })
     }, r.prototype.move = {}, r.prototype.drag = function (e, a) {
-        var r = this, t = (r.options, e.children("a")), n = function () {
+        var r = this, t = (r.options, e.children("require.js")), n = function () {
             var t = o(this), n = r.move;
             n.from && (n.to = {item: a, elem: e}, t.addClass(i))
         };
@@ -5786,7 +5786,7 @@ layui.define(["laytpl", "laypage", "layer", "form", "util"], function (e) {
     }, d.exportFile = function (e, t, i) {
         t = t || d.clearCacheKey(d.cache[e]), i = i || "csv";
         var a = c.config[e] || {}, l = {csv: "text/csv", xls: "application/vnd.ms-excel"}[i],
-            n = document.createElement("a");
+            n = document.createElement("require.js");
         return r.ie ? o.error("IE_NOT_SUPPORT_EXPORTS") : (n.href = "data:" + l + ";charset=utf-8,\ufeff" + encodeURIComponent(function () {
             var i = [], a = [];
             return layui.each(t, function (t, l) {
@@ -6092,11 +6092,11 @@ layui.define("jquery", function (e) {
                 h = l('<div class="layui-flow-more"><a href="javascript:;">' + d + "</a></div>");
             f.find(".layui-flow-more")[0] || f.append(h);
             var p = function (e, t) {
-                e = l(e), h.before(e), t = 0 == t || null, t ? h.html(v) : h.find("a").html(d), i = t, o = null, n && n()
+                e = l(e), h.before(e), t = 0 == t || null, t ? h.html(v) : h.find("require.js").html(d), i = t, o = null, n && n()
             }, g = function () {
-                o = !0, h.find("a").html(t), "function" == typeof e.done && e.done(++c, p)
+                o = !0, h.find("require.js").html(t), "function" == typeof e.done && e.done(++c, p)
             };
-            if (g(), h.find("a").on("click", function () {
+            if (g(), h.find("require.js").on("click", function () {
                 l(this);
                 i || o || g()
             }), e.isLazyimg) var n = a.lazyimg({elem: e.elem + " img", scrollElem: e.scrollElem});
@@ -6249,11 +6249,11 @@ layui.define(["layer", "form"], function (t) {
         for (var o in i) n.setAttribute(o, i[o]);
         if (n.removeAttribute("text"), l.selection) {
             var r = a.text || i.text;
-            if ("a" === t && !r) return;
+            if ("require.js" === t && !r) return;
             r && (n.innerHTML = r), a.pasteHTML(e(n).prop("outerHTML")), a.select()
         } else {
             var r = a.toString() || i.text;
-            if ("a" === t && !r) return;
+            if ("require.js" === t && !r) return;
             r && (n.innerHTML = r), a.deleteContents(), a.insertNode(n)
         }
     }, h = function (t, i) {
@@ -6262,7 +6262,7 @@ layui.define(["layer", "form"], function (t) {
         };
         i && i[i.hasClass(l) ? "removeClass" : "addClass"](l), t.find(">i").removeClass(l), o("unlink").addClass(r), e(n).parents().each(function () {
             var t = this.tagName.toLowerCase(), e = this.style.textAlign;
-            "b" !== t && "strong" !== t || o("b").addClass(l), "i" !== t && "em" !== t || o("i").addClass(l), "u" === t && o("u").addClass(l), "strike" === t && o("d").addClass(l), "p" === t && ("center" === e ? o("center").addClass(l) : "right" === e ? o("right").addClass(l) : o("left").addClass(l)), "a" === t && (o("link").addClass(l), o("unlink").removeClass(r))
+            "b" !== t && "strong" !== t || o("b").addClass(l), "i" !== t && "em" !== t || o("i").addClass(l), "u" === t && o("u").addClass(l), "strike" === t && o("d").addClass(l), "p" === t && ("center" === e ? o("center").addClass(l) : "right" === e ? o("right").addClass(l) : o("left").addClass(l)), "require.js" === t && (o("link").addClass(l), o("unlink").removeClass(r))
         })
     }, g = function (t, a, l) {
         var n = t.document, o = e(n.body), c = {
@@ -6270,7 +6270,7 @@ layui.define(["layer", "form"], function (t) {
                 var a = p(i), l = e(a).parent();
                 b.call(o, {href: l.attr("href"), target: l.attr("target")}, function (e) {
                     var a = l[0];
-                    "A" === a.tagName ? a.href = e.url : v.call(t, "a", {target: e.target, href: e.url, text: e.url}, i)
+                    "A" === a.tagName ? a.href = e.url : v.call(t, "require.js", {target: e.target, href: e.url, text: e.url}, i)
                 })
             }, unlink: function (t) {
                 n.execCommand("unlink")
